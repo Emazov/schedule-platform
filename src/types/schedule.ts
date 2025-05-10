@@ -26,7 +26,7 @@ export type Department = {
 export type Group = {
 	id: number;
 	year: number;
-	dep: number;
+	departmentId: number;
 	code: string;
 	title: string;
 };

@@ -43,6 +43,26 @@ export const colorPalette = [
 	'#6C5B7B',
 ];
 
+export const teachers = [
+	{ id: 0, code: 'andrei_ermakov', name: 'Andrei Ermakov' },
+	{ id: 1, code: 'meezan_chand', name: 'Mr. Meezan Chand' },
+	{ id: 2, code: 'remudin_mecuria', name: 'Dr. Remudin Mecuria' },
+	{ id: 3, code: 'hussein_chebsi', name: 'Mr. Hussein Chebsi' },
+	{ id: 4, code: 'dim_shayahmetov', name: 'Mr. Dim Shayahmetov' },
+	{ id: 5, code: 'mekia_gaso', name: 'Ms. Mekia Gaso' },
+	{ id: 6, code: 'zhenishbek_orozakhunov', name: 'Mr. Zhenishbek Orozakhunov' },
+];
+
+export const rooms = [
+	{ id: 0, code: 'biglab', name: 'BIGLAB' },
+	{ id: 1, code: '101', name: '101' },
+	{ id: 2, code: '202', name: '202' },
+	{ id: 3, code: '203', name: '203' },
+	{ id: 4, code: '204', name: '204' },
+	{ id: 5, code: '205', name: '205' },
+	{ id: 6, code: '210', name: '210' },
+];
+
 export const lessons = [
 	{
 		id: 0,
@@ -136,26 +156,6 @@ export const lessons = [
 	},
 ];
 
-export const teachers = [
-	{ id: 0, code: 'andrei_ermakov', name: 'Andrei Ermakov' },
-	{ id: 1, code: 'meezan_chand', name: 'Mr. Meezan Chand' },
-	{ id: 2, code: 'remudin_mecuria', name: 'Dr. Remudin Mecuria' },
-	{ id: 3, code: 'hussein_chebsi', name: 'Mr. Hussein Chebsi' },
-	{ id: 4, code: 'dim_shayahmetov', name: 'Mr. Dim Shayahmetov' },
-	{ id: 5, code: 'mekia_gaso', name: 'Ms. Mekia Gaso' },
-	{ id: 6, code: 'zhenishbek_orozakhunov', name: 'Mr. Zhenishbek Orozakhunov' },
-];
-
-export const rooms = [
-	{ id: 0, code: 'biglab', name: 'BIGLAB' },
-	{ id: 1, code: '101', name: '101' },
-	{ id: 2, code: '202', name: '202' },
-	{ id: 3, code: '203', name: '203' },
-	{ id: 4, code: '204', name: '204' },
-	{ id: 5, code: '205', name: '205' },
-	{ id: 6, code: '210', name: '210' },
-];
-
 export const departments = [
 	{ id: 0, code: 'com', title: 'Computer Science' },
 	{ id: 1, code: 'math', title: 'Mathematics' },
@@ -163,16 +163,33 @@ export const departments = [
 
 export const groups = [
 	// Computer Science
-	{ id: 0, year: 24, dep: 0, code: 'comceh_24', title: 'COMCEH-24' },
-	{ id: 1, year: 24, dep: 0, code: 'comse_24', title: 'COMSE-24' },
-	{ id: 2, year: 24, dep: 0, code: 'comfci_24', title: 'COMFCI-24' },
-	{ id: 3, year: 23, dep: 0, code: 'comsep_23', title: 'COMSEP-23' },
-	{ id: 4, year: 23, dep: 0, code: 'comceh_23', title: 'COMCEH-23' },
-	{ id: 5, year: 23, dep: 0, code: 'comse_23', title: 'COMSE-23' },
-	{ id: 6, year: 23, dep: 0, code: 'comfci_23', title: 'COMFCI-23' },
-	{ id: 7, year: 22, dep: 0, code: 'com_22a', title: 'COM-22a' },
-	{ id: 8, year: 22, dep: 0, code: 'com_22b', title: 'COM-22b' },
-	{ id: 9, year: 21, dep: 0, code: 'com_21', title: 'COM-21' },
+	{ id: 0, year: 24, departmentId: 0, code: 'comceh_24', title: 'COMCEH-24' },
+	{ id: 1, year: 24, departmentId: 0, code: 'comse_24', title: 'COMSE-24' },
+	{ id: 2, year: 24, departmentId: 0, code: 'comfci_24', title: 'COMFCI-24' },
+	{ id: 3, year: 23, departmentId: 0, code: 'comsep_23', title: 'COMSEP-23' },
+	{ id: 4, year: 23, departmentId: 0, code: 'comceh_23', title: 'COMCEH-23' },
+	{ id: 5, year: 23, departmentId: 0, code: 'comse_23', title: 'COMSE-23' },
+	{ id: 6, year: 23, departmentId: 0, code: 'comfci_23', title: 'COMFCI-23' },
+	{ id: 7, year: 22, departmentId: 0, code: 'com_22a', title: 'COM-22a' },
+	{ id: 8, year: 22, departmentId: 0, code: 'com_22b', title: 'COM-22b' },
+	{ id: 9, year: 21, departmentId: 0, code: 'com_21', title: 'COM-21' },
 	// Mathematics
-	
+	{
+		id: 10,
+		year: 24,
+		departmentId: 1,
+		code: 'matdais_24',
+		title: 'MATDAIS-24',
+	},
+	{ id: 11, year: 24, departmentId: 1, code: 'matmie_24', title: 'MATMIE-24' },
+	{
+		id: 12,
+		year: 23,
+		departmentId: 1,
+		code: 'matdais_23',
+		title: 'MATDAIS-23',
+	},
+	{ id: 13, year: 23, departmentId: 1, code: 'matmie_23', title: 'MATMIE-23' },
+	{ id: 14, year: 22, departmentId: 1, code: 'math_22', title: 'MATH-22' },
+	{ id: 15, year: 21, departmentId: 1, code: 'math_21', title: 'MATH-21' },
 ];

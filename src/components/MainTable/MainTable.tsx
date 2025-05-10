@@ -6,6 +6,7 @@ import ActiveTable from './components/ActiveTable';
 import type {
 	Day,
 	TimeSlot,
+	Department,
 	Group,
 	Schedule,
 	Lesson,
@@ -16,6 +17,7 @@ import type {
 type MainTableProps = {
 	days: Day[];
 	timeSlots: TimeSlot[];
+	departments: Department[];
 	groups: Group[];
 	schedule: Schedule[];
 	lessons: Lesson[];
@@ -26,6 +28,7 @@ type MainTableProps = {
 const MainTable = ({
 	days,
 	timeSlots,
+	departments,
 	groups,
 	schedule,
 	lessons,
@@ -37,10 +40,25 @@ const MainTable = ({
 	const [selectedDay, setSelectedDay] = useState(days[0].id);
 	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
 	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
+	const [selectedDepartment, setSelectedDepartment] = useState(
+		departments[0].id,
+	);
+
 	const [activeSchedule, setActiveSchedule] = useState({
 		group: true,
 		teacher: false,
 	});
+
+	useEffect(() => {
+		const firstGroupInDepartment = filteredDepartments[0]?.id || NO_SELECTION;
+		setSelectedGroup(firstGroupInDepartment);
+	}, [selectedDepartment]);
+
+	const filteredDepartments = useMemo(() => {
+		return selectedDepartment === NO_SELECTION
+			? groups
+			: groups.filter((group) => group.departmentId === selectedDepartment);
+	}, [groups, selectedDepartment]);
 
 	const groupSchedule = useMemo(() => {
 		if (selectedGroup === NO_SELECTION) return [];
@@ -77,7 +95,7 @@ const MainTable = ({
 			{activeSchedule.group && (
 				<option value={NO_SELECTION}>Full schedule</option>
 			)}
-			{(activeSchedule.group ? groups : days).map((item) => (
+			{(activeSchedule.group ? filteredDepartments : days).map((item) => (
 				<option key={item.id} value={item.id}>
 					{item.title}
 				</option>
@@ -96,32 +114,51 @@ const MainTable = ({
 			</div>
 		));
 
-	const renderRows = () =>
-		(activeSchedule.group ? days : groups).map((row, idx) => (
-			<ActiveTable
-				key={row.id}
-				row={row}
-				rowIdx={idx}
-				timeSlots={timeSlots}
-				lessons={lessons}
-				teachers={teachers}
-				rooms={rooms}
-				activeGroupSchedule={activeSchedule.group}
-				selectedDaySchedule={filteredSchedule}
-				selectedGroupSchedule={filteredSchedule}
-				setSelectedGroup={setSelectedGroup}
-			/>
-		));
+	const renderRows = () => {
+		
+		return (activeSchedule.group ? days : filteredDepartments).map(
+			(row, idx) => (
+				<ActiveTable
+					key={row.id}
+					row={row}
+					rowIdx={idx}
+					timeSlots={timeSlots}
+					lessons={lessons}
+					teachers={teachers}
+					rooms={rooms}
+					activeGroupSchedule={activeSchedule.group}
+					selectedDaySchedule={filteredSchedule}
+					selectedGroupSchedule={filteredSchedule}
+					setSelectedGroup={setSelectedGroup}
+				/>
+			),
+		);
+	};
 
 	return (
 		<div className='main_table'>
 			<div className='main_table_filter'>
 				<select
 					className='header_select custom_select'
+					value={selectedDepartment}
+					onChange={(e) => setSelectedDepartment(Number(e.target.value))}
+				>
+					<option value={NO_SELECTION}>All departments</option>
+
+					{departments.map((department) => (
+						<option key={department.id} value={department.id}>
+							{department.title}
+						</option>
+					))}
+				</select>
+
+				<select
+					className='header_select custom_select'
 					value={selectedTeacher}
 					onChange={(e) => setSelectedTeacher(Number(e.target.value))}
 				>
 					<option value={NO_SELECTION}>Filter by teacher</option>
+
 					{teachers.map((teacher) => (
 						<option key={teacher.id} value={teacher.id}>
 							{teacher.name}

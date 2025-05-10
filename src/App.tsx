@@ -6,6 +6,7 @@ import {
 	roles,
 	days,
 	timeSlots,
+	departments,
 	groups,
 	lessons,
 	teachers,
@@ -21,6 +22,7 @@ const App = () => {
 			<MainTable
 				days={days}
 				timeSlots={timeSlots}
+				departments={departments}
 				groups={groups}
 				schedule={schedule}
 				lessons={lessons}

@@ -1,7 +1,7 @@
 .main_table {
 	max-width: 1600px;
-	margin: 0 auto;
-	padding: 0 10px;
+	margin: 0 auto 100px;
+	padding: 10px;
 }
 
 .main_table_filter {
@@ -47,6 +47,7 @@
 	justify-content: center;
 	padding: 10px;
 	font-weight: bold;
+	text-transform: uppercase;
 	background-color: #f0f0f0;
 	border-right: 1px solid #ccc;
 }

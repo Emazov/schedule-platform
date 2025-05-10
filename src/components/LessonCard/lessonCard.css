@@ -9,7 +9,12 @@
 	text-align: center;
 }
 
-.lesson_card__time {
-	display: flex;
-	justify-content: space-between;
+.lesson_card__title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.lesson_card__text {
+	font-size: 14px;
+	font-weight: 500;
 }
