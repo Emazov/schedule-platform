@@ -1,54 +1,39 @@
-# React + TypeScript + Vite
+# Schedule Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание
 
-Currently, two official plugins are available:
+Приложение для управления расписанием, позволяющее пользователям просматривать и фильтровать занятия по дням, группам и преподавателям.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Установка
 
-## Expanding the ESLint configuration
+1. Клонируйте репозиторий:
+   ```bash
+   git clone <URL_репозитория>
+   ```
+2. Перейдите в директорию проекта:
+   ```bash
+   cd schedule-app
+   ```
+3. Установите зависимости:
+   ```bash
+   npm install
+   ```
+4. Запустите приложение:
+   ```bash
+   npm start
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Использование
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+После запуска приложения вы сможете выбрать день или группу, чтобы просмотреть соответствующее расписание.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Структура проекта
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `src/components`: Содержит все компоненты приложения.
+  - `Header`: Компонент заголовка.
+  - `MainTable`: Основной компонент для отображения расписания.
+  - `LessonCard`: Компонент для отображения информации о занятии.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Лицензия
+
+MIT License
