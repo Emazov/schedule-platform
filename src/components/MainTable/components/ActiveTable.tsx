@@ -17,12 +17,9 @@ type ActiveTableProps = {
 	lessons: Lesson[];
 	teachers: Teacher[];
 	rooms: Room[];
-	selectedDaySchedule: Schedule[];
-	selectedTeacherSchedule: Schedule[];
-	selectedGroupSchedule: Schedule[];
-	selectedTeacher: number;
 	activeGroupSchedule: boolean;
-	activeTeacherSchedule: boolean;
+	selectedDaySchedule: Schedule[];
+	selectedGroupSchedule: Schedule[];
 	setSelectedGroup: (id: number) => void;
 };
 
@@ -34,31 +31,16 @@ const ActiveTable = ({
 	teachers,
 	rooms,
 	activeGroupSchedule,
-	activeTeacherSchedule,
 	selectedDaySchedule,
-	selectedTeacherSchedule,
 	selectedGroupSchedule,
-	selectedTeacher,
 	setSelectedGroup,
 }: ActiveTableProps) => {
 	const occupiedSlots = new Set();
 
 	const getScheduledLesson = (time: TimeSlot) => {
 		if (activeGroupSchedule) {
-			if (activeTeacherSchedule) {
-				return selectedGroupSchedule.find(
-					(lesson) =>
-						lesson.dayId === row.id &&
-						lesson.timeStartId === time.id &&
-						lesson.teacherId === selectedTeacher,
-				);
-			}
 			return selectedGroupSchedule.find(
 				(lesson) => lesson.dayId === row.id && lesson.timeStartId === time.id,
-			);
-		} else if (activeTeacherSchedule) {
-			return selectedTeacherSchedule.find(
-				(lesson) => lesson.groupId === row.id && lesson.timeStartId === time.id,
 			);
 		}
 

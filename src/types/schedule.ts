@@ -17,8 +17,16 @@ export type Role = {
 	name: string;
 };
 
+export type Department = {
+	id: number;
+	code: string;
+	title: string;
+};
+
 export type Group = {
 	id: number;
+	year: number;
+	dep: number;
 	code: string;
 	title: string;
 };
