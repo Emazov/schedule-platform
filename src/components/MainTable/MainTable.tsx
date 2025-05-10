@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
 import './mainTable.css';
 
-import ActiveTable from './components/ActiveTable';
+import ActiveTableRow from './components/ActiveTableRow';
+import ScheduleGrid from './components/ScheduleGrid';
+import TableFilters from './components/TableFilters';
 
 import type {
 	Day,
@@ -49,6 +51,14 @@ const MainTable = ({
 		teacher: false,
 	});
 
+	const handleGroupSelect = (groupId: number) => {
+		setSelectedGroup(groupId);
+		const group = groups.find((g) => g.id === groupId);
+		if (group) {
+			setSelectedDepartment(group.departmentId);
+		}
+	};
+
 	useEffect(() => {
 		const firstGroupInDepartment = filteredGroups[0]?.id || NO_SELECTION;
 		setSelectedGroup(firstGroupInDepartment);
@@ -92,7 +102,7 @@ const MainTable = ({
 	}, [selectedGroup, selectedTeacher]);
 
 	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
-		<ActiveTable
+		<ActiveTableRow
 			key={row.id}
 			row={row}
 			rowIdx={rowIdx}
@@ -103,43 +113,30 @@ const MainTable = ({
 			activeGroupSchedule={activeSchedule.group}
 			selectedDaySchedule={filteredSchedule}
 			selectedGroupSchedule={filteredSchedule}
-			setSelectedGroup={setSelectedGroup}
+			setSelectedGroup={handleGroupSelect}
 		/>
 	);
 
 	const renderHeader = () => (
-		<>
-			<select
-				value={activeSchedule.group ? selectedGroup : selectedDay}
-				onChange={(e) =>
-					activeSchedule.group
-						? setSelectedGroup(Number(e.target.value))
-						: setSelectedDay(Number(e.target.value))
-				}
-				className='custom_select'
-			>
-				{activeSchedule.group && (
-					<option value={NO_SELECTION}>Full schedule</option>
-				)}
-				{(activeSchedule.group ? filteredGroups : days).map((item) => (
-					<option key={item.id} value={item.id}>
-						{item.title}
-					</option>
-				))}
-			</select>
-		</>
+		<select
+			value={activeSchedule.group ? selectedGroup : selectedDay}
+			onChange={(e) =>
+				activeSchedule.group
+					? setSelectedGroup(Number(e.target.value))
+					: setSelectedDay(Number(e.target.value))
+			}
+			className='custom_select'
+		>
+			{activeSchedule.group && (
+				<option value={NO_SELECTION}>Full schedule</option>
+			)}
+			{(activeSchedule.group ? filteredGroups : days).map((item) => (
+				<option key={item.id} value={item.id}>
+					{item.title}
+				</option>
+			))}
+		</select>
 	);
-
-	const renderTimeSlots = () =>
-		timeSlots.map((time) => (
-			<div
-				key={time.slot}
-				id={time.id.toString()}
-				className='main_table__header'
-			>
-				{time.slot} <br /> {time.start}-{time.end}
-			</div>
-		));
 
 	const renderRows = () => {
 		if (activeSchedule.group) {
@@ -181,44 +178,19 @@ const MainTable = ({
 
 	return (
 		<div className='main_table'>
-			<div className='main_table_filter'>
-				<select
-					className='header_select custom_select'
-					value={selectedDepartment}
-					onChange={(e) => setSelectedDepartment(Number(e.target.value))}
-				>
-					<option value={NO_SELECTION}>All departments</option>
+			<TableFilters
+				departments={departments}
+				teachers={teachers}
+				selectedDepartment={selectedDepartment}
+				selectedTeacher={selectedTeacher}
+				onDepartmentChange={setSelectedDepartment}
+				onTeacherChange={setSelectedTeacher}
+				noSelection={NO_SELECTION}
+			/>
 
-					{departments.map((department) => (
-						<option key={department.id} value={department.id}>
-							{department.title}
-						</option>
-					))}
-				</select>
-
-				<select
-					className='header_select custom_select'
-					value={selectedTeacher}
-					onChange={(e) => setSelectedTeacher(Number(e.target.value))}
-				>
-					<option value={NO_SELECTION}>Filter by teacher</option>
-
-					{teachers.map((teacher) => (
-						<option key={teacher.id} value={teacher.id}>
-							{teacher.name}
-						</option>
-					))}
-				</select>
-			</div>
-
-			<div
-				className='main_table__container'
-				style={{ gridTemplateColumns: `auto repeat(${timeSlots.length}, 1fr)` }}
-			>
-				<div className='main_table__header'>{renderHeader()}</div>
-				{renderTimeSlots()}
+			<ScheduleGrid timeSlots={timeSlots} headerContent={renderHeader()}>
 				{renderRows()}
-			</div>
+			</ScheduleGrid>
 		</div>
 	);
 };
