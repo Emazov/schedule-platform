@@ -50,7 +50,7 @@ const MainTable = ({
 	});
 
 	useEffect(() => {
-		const firstGroupInDepartment = filteredDepartments[0]?.id || NO_SELECTION;
+		const firstGroupInDepartment = filteredGroups[0]?.id || NO_SELECTION;
 		setSelectedGroup(firstGroupInDepartment);
 	}, [selectedDepartment]);
 
@@ -63,7 +63,7 @@ const MainTable = ({
 		}
 	}, [selectedGroup]);
 
-	const filteredDepartments = useMemo(() => {
+	const filteredGroups = useMemo(() => {
 		return selectedDepartment === NO_SELECTION
 			? groups
 			: groups.filter((group) => group.departmentId === selectedDepartment);
@@ -91,25 +91,43 @@ const MainTable = ({
 		});
 	}, [selectedGroup, selectedTeacher]);
 
+	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
+		<ActiveTable
+			key={row.id}
+			row={row}
+			rowIdx={rowIdx}
+			timeSlots={timeSlots}
+			lessons={lessons}
+			teachers={teachers}
+			rooms={rooms}
+			activeGroupSchedule={activeSchedule.group}
+			selectedDaySchedule={filteredSchedule}
+			selectedGroupSchedule={filteredSchedule}
+			setSelectedGroup={setSelectedGroup}
+		/>
+	);
+
 	const renderHeader = () => (
-		<select
-			value={activeSchedule.group ? selectedGroup : selectedDay}
-			onChange={(e) =>
-				activeSchedule.group
-					? setSelectedGroup(Number(e.target.value))
-					: setSelectedDay(Number(e.target.value))
-			}
-			className='custom_select'
-		>
-			{activeSchedule.group && (
-				<option value={NO_SELECTION}>Full schedule</option>
-			)}
-			{(activeSchedule.group ? filteredDepartments : days).map((item) => (
-				<option key={item.id} value={item.id}>
-					{item.title}
-				</option>
-			))}
-		</select>
+		<>
+			<select
+				value={activeSchedule.group ? selectedGroup : selectedDay}
+				onChange={(e) =>
+					activeSchedule.group
+						? setSelectedGroup(Number(e.target.value))
+						: setSelectedDay(Number(e.target.value))
+				}
+				className='custom_select'
+			>
+				{activeSchedule.group && (
+					<option value={NO_SELECTION}>Full schedule</option>
+				)}
+				{(activeSchedule.group ? filteredGroups : days).map((item) => (
+					<option key={item.id} value={item.id}>
+						{item.title}
+					</option>
+				))}
+			</select>
+		</>
 	);
 
 	const renderTimeSlots = () =>
@@ -125,28 +143,14 @@ const MainTable = ({
 
 	const renderRows = () => {
 		if (activeSchedule.group) {
-			return days.map((row, idx) => (
-				<ActiveTable
-					key={row.id}
-					row={row}
-					rowIdx={idx}
-					timeSlots={timeSlots}
-					lessons={lessons}
-					teachers={teachers}
-					rooms={rooms}
-					activeGroupSchedule={activeSchedule.group}
-					selectedDaySchedule={filteredSchedule}
-					selectedGroupSchedule={filteredSchedule}
-					setSelectedGroup={setSelectedGroup}
-				/>
-			));
+			return days.map((row, idx) => renderActiveTable(row, idx));
 		}
 
 		if (selectedDepartment === NO_SELECTION) {
 			let currentRow = 0;
 			return departments
 				.map((department) => {
-					const departmentGroups = filteredDepartments.filter(
+					const departmentGroups = filteredGroups.filter(
 						(group) => group.departmentId === department.id,
 					);
 
@@ -163,21 +167,7 @@ const MainTable = ({
 						</div>,
 						...departmentGroups.map((group) => {
 							currentRow++;
-							return (
-								<ActiveTable
-									key={group.id}
-									row={group}
-									rowIdx={currentRow}
-									timeSlots={timeSlots}
-									lessons={lessons}
-									teachers={teachers}
-									rooms={rooms}
-									activeGroupSchedule={activeSchedule.group}
-									selectedDaySchedule={filteredSchedule}
-									selectedGroupSchedule={filteredSchedule}
-									setSelectedGroup={setSelectedGroup}
-								/>
-							);
+							return renderActiveTable(group, currentRow);
 						}),
 					];
 					currentRow++;
@@ -186,21 +176,7 @@ const MainTable = ({
 				.flat();
 		}
 
-		return filteredDepartments.map((row, idx) => (
-			<ActiveTable
-				key={row.id}
-				row={row}
-				rowIdx={idx}
-				timeSlots={timeSlots}
-				lessons={lessons}
-				teachers={teachers}
-				rooms={rooms}
-				activeGroupSchedule={activeSchedule.group}
-				selectedDaySchedule={filteredSchedule}
-				selectedGroupSchedule={filteredSchedule}
-				setSelectedGroup={setSelectedGroup}
-			/>
-		));
+		return filteredGroups.map((row, idx) => renderActiveTable(row, idx));
 	};
 
 	return (
