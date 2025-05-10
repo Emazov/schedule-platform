@@ -54,6 +54,15 @@ const MainTable = ({
 		setSelectedGroup(firstGroupInDepartment);
 	}, [selectedDepartment]);
 
+	useEffect(() => {
+		if (selectedGroup !== NO_SELECTION) {
+			const group = groups.find((g) => g.id === selectedGroup);
+			if (group) {
+				setSelectedDepartment(group.departmentId);
+			}
+		}
+	}, [selectedGroup]);
+
 	const filteredDepartments = useMemo(() => {
 		return selectedDepartment === NO_SELECTION
 			? groups
@@ -115,9 +124,8 @@ const MainTable = ({
 		));
 
 	const renderRows = () => {
-		
-		return (activeSchedule.group ? days : filteredDepartments).map(
-			(row, idx) => (
+		if (activeSchedule.group) {
+			return days.map((row, idx) => (
 				<ActiveTable
 					key={row.id}
 					row={row}
@@ -131,8 +139,68 @@ const MainTable = ({
 					selectedGroupSchedule={filteredSchedule}
 					setSelectedGroup={setSelectedGroup}
 				/>
-			),
-		);
+			));
+		}
+
+		if (selectedDepartment === NO_SELECTION) {
+			let currentRow = 0;
+			return departments
+				.map((department) => {
+					const departmentGroups = filteredDepartments.filter(
+						(group) => group.departmentId === department.id,
+					);
+
+					const rows = [
+						<div
+							key={`dept-${department.id}`}
+							className='main_table__department_header'
+							style={{
+								gridRow: currentRow + 2,
+								gridColumn: '1 / -1',
+							}}
+						>
+							{department.title}
+						</div>,
+						...departmentGroups.map((group, idx) => {
+							currentRow++;
+							return (
+								<ActiveTable
+									key={group.id}
+									row={group}
+									rowIdx={currentRow}
+									timeSlots={timeSlots}
+									lessons={lessons}
+									teachers={teachers}
+									rooms={rooms}
+									activeGroupSchedule={activeSchedule.group}
+									selectedDaySchedule={filteredSchedule}
+									selectedGroupSchedule={filteredSchedule}
+									setSelectedGroup={setSelectedGroup}
+								/>
+							);
+						}),
+					];
+					currentRow++;
+					return rows;
+				})
+				.flat();
+		}
+
+		return filteredDepartments.map((row, idx) => (
+			<ActiveTable
+				key={row.id}
+				row={row}
+				rowIdx={idx}
+				timeSlots={timeSlots}
+				lessons={lessons}
+				teachers={teachers}
+				rooms={rooms}
+				activeGroupSchedule={activeSchedule.group}
+				selectedDaySchedule={filteredSchedule}
+				selectedGroupSchedule={filteredSchedule}
+				setSelectedGroup={setSelectedGroup}
+			/>
+		));
 	};
 
 	return (
