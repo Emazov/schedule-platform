@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import './header.css';
 
-type Role = {
-	id: number;
-	code: string;
-	name: string;
-};
-
+import type { Role } from '../../types/schedule';
 
 type HeaderProps = {
 	roles: Role[];
@@ -32,8 +27,6 @@ const Header = ({ roles }: HeaderProps) => {
 							</option>
 						))}
 					</select>
-
-					
 				</div>
 			</div>
 		</header>

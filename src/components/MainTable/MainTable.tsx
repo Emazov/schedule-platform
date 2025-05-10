@@ -1,8 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import './mainTable.css';
 
-import DayRow from './components/DayRow';
-import GroupRow from './components/GroupRow';
+import ActiveTable from './components/ActiveTable';
 
 import type {
 	Day,
@@ -33,12 +32,13 @@ const MainTable = ({
 	teachers,
 	rooms,
 }: MainTableProps) => {
-	const [selectedDay, setSelectedDay] = useState(days[0].id);
-	const [selectedGroup, setSelectedGroup] = useState(1000);
-	const [selectedTeacher, setSelectedTeacher] = useState(1000);
+	const NO_SELECTION = -1;
 
-	const [activeGroupSchedule, setActiveGroupSchedule] =
-		useState<boolean>(false);
+	const [selectedDay, setSelectedDay] = useState(days[0].id);
+	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
+	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
+
+	const [activeGroupSchedule, setActiveGroupSchedule] = useState<boolean>(true);
 
 	const [activeTeacherSchedule, setActiveTeacherSchedule] =
 		useState<boolean>(false);
@@ -62,12 +62,12 @@ const MainTable = ({
 	);
 
 	useEffect(() => {
-		if (selectedGroup !== 1000) {
+		if (selectedGroup !== NO_SELECTION) {
 			setActiveGroupSchedule(true);
 		} else {
 			setActiveGroupSchedule(false);
 		}
-		if (selectedTeacher !== 1000) {
+		if (selectedTeacher !== NO_SELECTION) {
 			setActiveTeacherSchedule(true);
 		} else {
 			setActiveTeacherSchedule(false);
@@ -82,7 +82,7 @@ const MainTable = ({
 					value={selectedTeacher}
 					onChange={(e) => setSelectedTeacher(Number(e.target.value))}
 				>
-					<option value='1000'>Filter by teacher</option>
+					<option value={NO_SELECTION}>Filter by teacher</option>
 					{teachers.map((teacher) => (
 						<option key={teacher.id} value={teacher.id}>
 							{teacher.name}
@@ -106,7 +106,7 @@ const MainTable = ({
 						className='custom_select'
 					>
 						{activeGroupSchedule ? (
-							<option value='1000'>Full schedule</option>
+							<option value={NO_SELECTION}>Full schedule</option>
 						) : (
 							''
 						)}
@@ -135,31 +135,39 @@ const MainTable = ({
 				))}
 
 				{activeGroupSchedule
-					? days.map((day) => (
-							<DayRow
+					? days.map((day, dayIdx) => (
+							<ActiveTable
 								key={day.id}
-								day={day}
+								row={day}
+								rowIdx={dayIdx}
 								timeSlots={timeSlots}
 								lessons={lessons}
 								teachers={teachers}
 								rooms={rooms}
-								selectedTeacher={selectedTeacher}
-								activeTeacherSchedule={activeTeacherSchedule}
-								selectedGroupSchedule={selectedGroupSchedule}
-							/>
-					  ))
-					: groups.map((group, groupIdx) => (
-							<GroupRow
-								key={group.id}
-								group={group}
-								groupIdx={groupIdx}
-								timeSlots={timeSlots}
+								activeGroupSchedule={activeGroupSchedule}
 								activeTeacherSchedule={activeTeacherSchedule}
 								selectedDaySchedule={selectedDaySchedule}
 								selectedTeacherSchedule={selectedTeacherSchedule}
+								selectedTeacher={selectedTeacher}
+								selectedGroupSchedule={selectedGroupSchedule}
+								setSelectedGroup={setSelectedGroup}
+							/>
+					  ))
+					: groups.map((group, groupIdx) => (
+							<ActiveTable
+								key={group.id}
+								row={group}
+								rowIdx={groupIdx}
+								timeSlots={timeSlots}
 								lessons={lessons}
 								teachers={teachers}
 								rooms={rooms}
+								activeGroupSchedule={activeGroupSchedule}
+								activeTeacherSchedule={activeTeacherSchedule}
+								selectedDaySchedule={selectedDaySchedule}
+								selectedTeacherSchedule={selectedTeacherSchedule}
+								selectedTeacher={selectedTeacher}
+								selectedGroupSchedule={selectedGroupSchedule}
 								setSelectedGroup={setSelectedGroup}
 							/>
 					  ))}

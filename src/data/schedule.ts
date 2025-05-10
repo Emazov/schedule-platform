@@ -149,4 +149,14 @@ export const schedule = [
 		teacherId: 5,
 		roomId: 2,
 	},
+	{
+		id: 15,
+		lessonId: 13,
+		groupId: 4,
+		timeStartId: 7,
+		duration: 4,
+		dayId: 0,
+		teacherId: 2,
+		roomId: 4,
+	},
 ];

@@ -4,12 +4,6 @@ export type Day = {
 	title: string;
 };
 
-export type Group = {
-	id: number;
-	code: string;
-	title: string;
-};
-
 export type TimeSlot = {
 	id: number;
 	slot: string;
@@ -17,15 +11,16 @@ export type TimeSlot = {
 	end: string;
 };
 
-export type Schedule = {
+export type Role = {
 	id: number;
-	lessonId: number;
-	groupId: number;
-	timeStartId: number;
-	duration: number;
-	dayId: number;
-	teacherId?: number;
-	roomId?: number;
+	code: string;
+	name: string;
+};
+
+export type Group = {
+	id: number;
+	code: string;
+	title: string;
 };
 
 export type Lesson = {
@@ -45,4 +40,15 @@ export type Room = {
 	id: number;
 	code: string;
 	name: string;
+};
+
+export type Schedule = {
+	id: number;
+	lessonId: number;
+	groupId: number;
+	timeStartId: number;
+	duration: number;
+	dayId: number;
+	teacherId?: number;
+	roomId?: number;
 };
