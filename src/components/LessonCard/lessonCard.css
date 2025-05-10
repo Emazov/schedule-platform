@@ -1,0 +1,15 @@
+.lesson_card {
+	height: 100%;
+	padding: 6px 12px;
+	border-radius: 4px;
+}
+
+.lesson_card__title,
+.lesson_card__text {
+	text-align: center;
+}
+
+.lesson_card__time {
+	display: flex;
+	justify-content: space-between;
+}

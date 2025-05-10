@@ -1,0 +1,35 @@
+.header {
+	margin-bottom: 34px;
+	width: 100%;
+	background-color: white;
+	box-shadow: 0 2px 2px #0000001a;
+}
+
+.header_container {
+	max-width: 1600px;
+	margin: 0 auto;
+	padding: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.header_logo {
+	width: 84px;
+	cursor: pointer;
+}
+
+.header_title {
+	font-size: 34px;
+	font-weight: 600;
+	cursor: default;
+}
+
+.header_select {
+	padding: 0 4px;
+	font-size: 16px;
+	font-weight: 500;
+	letter-spacing: 0.1em;
+	text-align: center;
+	text-transform: uppercase;
+}
