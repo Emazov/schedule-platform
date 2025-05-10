@@ -10,7 +10,6 @@ const MainTableHeader = ({ timeSlots }: MainTableHeaderProps) => {
 			{timeSlots.map((time) => (
 				<div
 					key={time.slot}
-					id={time.id.toString()}
 					className='main_table__header'
 				>
 					{time.slot} <br /> {time.start}-{time.end}

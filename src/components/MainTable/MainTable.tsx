@@ -59,10 +59,16 @@ const MainTable = ({
 		}
 	};
 
+	const filteredGroups = useMemo(() => {
+		return selectedDepartment === NO_SELECTION
+			? groups
+			: groups.filter((group) => group.departmentId === selectedDepartment);
+	}, [groups, selectedDepartment, NO_SELECTION]);
+
 	useEffect(() => {
 		const firstGroupInDepartment = filteredGroups[0]?.id || NO_SELECTION;
 		setSelectedGroup(firstGroupInDepartment);
-	}, [selectedDepartment]);
+	}, [filteredGroups, NO_SELECTION]);
 
 	useEffect(() => {
 		if (selectedGroup !== NO_SELECTION) {
@@ -71,35 +77,37 @@ const MainTable = ({
 				setSelectedDepartment(group.departmentId);
 			}
 		}
-	}, [selectedGroup]);
-
-	const filteredGroups = useMemo(() => {
-		return selectedDepartment === NO_SELECTION
-			? groups
-			: groups.filter((group) => group.departmentId === selectedDepartment);
-	}, [groups, selectedDepartment]);
+	}, [selectedGroup, groups, NO_SELECTION]);
 
 	const groupSchedule = useMemo(() => {
 		if (selectedGroup === NO_SELECTION) return [];
 		return schedule.filter((lesson) => lesson.groupId === selectedGroup);
-	}, [schedule, selectedGroup]);
+	}, [schedule, selectedGroup, NO_SELECTION]);
 
-	const filteredSchedule = useMemo(() => {
-		const base =
+	const currentSchedule = useMemo(() => {
+		const baseSchedule =
 			selectedGroup !== NO_SELECTION
 				? groupSchedule
 				: schedule.filter((lesson) => lesson.dayId === selectedDay);
+
 		return selectedTeacher !== NO_SELECTION
-			? base.filter((lesson) => lesson.teacherId === selectedTeacher)
-			: base;
-	}, [groupSchedule, schedule, selectedDay, selectedTeacher, selectedGroup]);
+			? baseSchedule.filter((lesson) => lesson.teacherId === selectedTeacher)
+			: baseSchedule;
+	}, [
+		groupSchedule,
+		schedule,
+		selectedDay,
+		selectedTeacher,
+		selectedGroup,
+		NO_SELECTION,
+	]);
 
 	useEffect(() => {
 		setActiveSchedule({
 			group: selectedGroup !== NO_SELECTION,
 			teacher: selectedTeacher !== NO_SELECTION,
 		});
-	}, [selectedGroup, selectedTeacher]);
+	}, [selectedGroup, selectedTeacher, NO_SELECTION]);
 
 	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
 		<ActiveTableRow
@@ -111,32 +119,40 @@ const MainTable = ({
 			teachers={teachers}
 			rooms={rooms}
 			activeGroupSchedule={activeSchedule.group}
-			selectedDaySchedule={filteredSchedule}
-			selectedGroupSchedule={filteredSchedule}
+			currentSchedule={currentSchedule}
 			setSelectedGroup={handleGroupSelect}
 		/>
 	);
 
-	const renderHeader = () => (
-		<select
-			value={activeSchedule.group ? selectedGroup : selectedDay}
-			onChange={(e) =>
-				activeSchedule.group
-					? setSelectedGroup(Number(e.target.value))
-					: setSelectedDay(Number(e.target.value))
+	const renderHeader = () => {
+		const isGroupView = activeSchedule.group;
+		const selectValue = isGroupView ? selectedGroup : selectedDay;
+		const itemsList = isGroupView ? filteredGroups : days;
+
+		const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+			const value = Number(e.target.value);
+			if (isGroupView) {
+				setSelectedGroup(value);
+			} else {
+				setSelectedDay(value);
 			}
-			className='custom_select'
-		>
-			{activeSchedule.group && (
-				<option value={NO_SELECTION}>Full schedule</option>
-			)}
-			{(activeSchedule.group ? filteredGroups : days).map((item) => (
-				<option key={item.id} value={item.id}>
-					{item.title}
-				</option>
-			))}
-		</select>
-	);
+		};
+
+		return (
+			<select
+				value={selectValue}
+				onChange={handleSelectChange}
+				className='custom_select'
+			>
+				{isGroupView && <option value={NO_SELECTION}>Full schedule</option>}
+				{itemsList.map((item) => (
+					<option key={item.id} value={item.id}>
+						{item.title}
+					</option>
+				))}
+			</select>
+		);
+	};
 
 	const renderRows = () => {
 		if (activeSchedule.group) {

@@ -1,9 +1,7 @@
-import LessonCard from '../../../LessonCard/LessonCard';
-import type { Lesson, Teacher, Room } from '../../../../types/schedule';
+import LessonCard from '../../LessonCard/LessonCard';
+import type { Lesson, Teacher, Room } from '../../../types/schedule';
 
 type FilledCellProps = {
-	timeId: number;
-	groupId: number;
 	columnStart: number;
 	duration: number;
 	lesson: Lesson;
@@ -12,8 +10,6 @@ type FilledCellProps = {
 };
 
 const FilledCell = ({
-	timeId,
-	groupId,
 	columnStart,
 	duration,
 	lesson,
@@ -23,12 +19,7 @@ const FilledCell = ({
 	const gridColumn = `${columnStart} / ${columnStart + duration}`;
 
 	return (
-		<div
-			id={timeId.toString()}
-			data-group={groupId}
-			className='main_table__cell'
-			style={{ gridColumn }}
-		>
+		<div className='main_table__cell' style={{ gridColumn }}>
 			<LessonCard lesson={lesson} teacher={teacher} room={room} />
 		</div>
 	);

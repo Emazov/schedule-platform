@@ -8,8 +8,7 @@ import type {
 	Schedule,
 } from '../../../types/schedule';
 
-import EmptyCell from './TableCells/EmptyCell';
-import FilledCell from './TableCells/FilledCell';
+import FilledCell from './FilledCell';
 
 type ActiveTableRowProps = {
 	row: Group | Day;
@@ -19,8 +18,7 @@ type ActiveTableRowProps = {
 	teachers: Teacher[];
 	rooms: Room[];
 	activeGroupSchedule: boolean;
-	selectedDaySchedule: Schedule[];
-	selectedGroupSchedule: Schedule[];
+	currentSchedule: Schedule[];
 	setSelectedGroup: (id: number) => void;
 };
 
@@ -32,19 +30,18 @@ const ActiveTableRow = ({
 	teachers,
 	rooms,
 	activeGroupSchedule,
-	selectedDaySchedule,
-	selectedGroupSchedule,
+	currentSchedule,
 	setSelectedGroup,
 }: ActiveTableRowProps) => {
 	const occupiedSlots = new Set();
 
 	const getScheduledLesson = (time: TimeSlot) => {
 		if (activeGroupSchedule) {
-			return selectedGroupSchedule.find(
+			return currentSchedule.find(
 				(lesson) => lesson.dayId === row.id && lesson.timeStartId === time.id,
 			);
 		}
-		return selectedDaySchedule.find(
+		return currentSchedule.find(
 			(lesson) => lesson.groupId === row.id && lesson.timeStartId === time.id,
 		);
 	};
@@ -52,7 +49,6 @@ const ActiveTableRow = ({
 	return (
 		<>
 			<div
-				id={row.id.toString()}
 				className='main_table__label'
 				style={{
 					gridRow: rowIdx + 2,
@@ -70,7 +66,7 @@ const ActiveTableRow = ({
 
 				const scheduledLesson = getScheduledLesson(time);
 				if (!scheduledLesson) {
-					return <EmptyCell key={time.id} timeId={time.id} groupId={row.id} />;
+					return <div key={time.id} className='main_table__cell' />;
 				}
 
 				const lesson = lessons.find((l) => l.id === scheduledLesson.lessonId);
@@ -87,8 +83,6 @@ const ActiveTableRow = ({
 					return (
 						<FilledCell
 							key={time.id}
-							timeId={time.id}
-							groupId={row.id}
 							columnStart={timeIdx + 2}
 							duration={scheduledLesson.duration}
 							lesson={lesson}
