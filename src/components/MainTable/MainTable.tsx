@@ -161,7 +161,7 @@ const MainTable = ({
 						>
 							{department.title}
 						</div>,
-						...departmentGroups.map((group, idx) => {
+						...departmentGroups.map((group) => {
 							currentRow++;
 							return (
 								<ActiveTable
