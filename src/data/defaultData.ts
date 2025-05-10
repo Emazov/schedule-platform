@@ -156,15 +156,23 @@ export const rooms = [
 	{ id: 6, code: '210', name: '210' },
 ];
 
+export const departments = [
+	{ id: 0, code: 'com', title: 'Computer Science' },
+	{ id: 1, code: 'math', title: 'Mathematics' },
+];
+
 export const groups = [
-	{ id: 0, code: 'comceh_24', title: 'COMCEH-24' },
-	{ id: 1, code: 'comse_24', title: 'COMSE-24' },
-	{ id: 2, code: 'comfci_24', title: 'COMFCI-24' },
-	{ id: 3, code: '2_comsep_23', title: '2 COMSEP-23' },
-	{ id: 4, code: 'comceh_23', title: 'COMCEH-23' },
-	{ id: 5, code: 'comse_23', title: 'COMSE-23' },
-	{ id: 6, code: 'comfci_23', title: 'COMFCI-23' },
-	{ id: 7, code: 'com_22a', title: 'COM-22a' },
-	{ id: 8, code: 'com_22b', title: 'COM-22b' },
-	{ id: 9, code: 'com_21', title: 'COM-21' },
+	// Computer Science
+	{ id: 0, year: 24, dep: 0, code: 'comceh_24', title: 'COMCEH-24' },
+	{ id: 1, year: 24, dep: 0, code: 'comse_24', title: 'COMSE-24' },
+	{ id: 2, year: 24, dep: 0, code: 'comfci_24', title: 'COMFCI-24' },
+	{ id: 3, year: 23, dep: 0, code: 'comsep_23', title: 'COMSEP-23' },
+	{ id: 4, year: 23, dep: 0, code: 'comceh_23', title: 'COMCEH-23' },
+	{ id: 5, year: 23, dep: 0, code: 'comse_23', title: 'COMSE-23' },
+	{ id: 6, year: 23, dep: 0, code: 'comfci_23', title: 'COMFCI-23' },
+	{ id: 7, year: 22, dep: 0, code: 'com_22a', title: 'COM-22a' },
+	{ id: 8, year: 22, dep: 0, code: 'com_22b', title: 'COM-22b' },
+	{ id: 9, year: 21, dep: 0, code: 'com_21', title: 'COM-21' },
+	// Mathematics
+	
 ];
