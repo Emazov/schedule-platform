@@ -1,4 +1,4 @@
-import './LessonCard.css';
+import './lessonCard.css';
 
 import type { Lesson, Teacher, Room } from '../../types/schedule';
 
