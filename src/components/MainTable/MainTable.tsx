@@ -82,7 +82,7 @@ const MainTable = ({
 					value={selectedTeacher}
 					onChange={(e) => setSelectedTeacher(Number(e.target.value))}
 				>
-					<option value='1000'>Full schedule</option>
+					<option value='1000'>Filter by teacher</option>
 					{teachers.map((teacher) => (
 						<option key={teacher.id} value={teacher.id}>
 							{teacher.name}
