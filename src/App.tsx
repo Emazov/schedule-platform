@@ -6,14 +6,13 @@ import {
 	roles,
 	days,
 	timeSlots,
-	departments,
-	groups,
-	lessons,
 	teachers,
 	rooms,
 } from './data/defaultData';
 
+import { departments, groups } from './data/groups';
 import { schedule } from './data/schedule';
+import { lessons } from './data/lessons';
 
 const App = () => {
 	return (
