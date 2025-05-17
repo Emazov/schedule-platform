@@ -14,7 +14,7 @@ import type {
 	Lesson,
 	Teacher,
 	Room,
-} from '../../types/schedule';
+} from '../../types/types';
 
 type MainTableProps = {
 	days: Day[];
@@ -25,6 +25,7 @@ type MainTableProps = {
 	lessons: Lesson[];
 	teachers: Teacher[];
 	rooms: Room[];
+	role: string;
 };
 
 const MainTable = ({
@@ -36,15 +37,14 @@ const MainTable = ({
 	lessons,
 	teachers,
 	rooms,
+	role,
 }: MainTableProps) => {
 	const NO_SELECTION = -1;
 
 	const [selectedDay, setSelectedDay] = useState(days[0].id);
 	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
 	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
-	const [selectedDepartment, setSelectedDepartment] = useState(
-		departments[0].id,
-	);
+	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
 
 	const [activeSchedule, setActiveSchedule] = useState({
 		group: true,
@@ -53,16 +53,22 @@ const MainTable = ({
 
 	const handleGroupSelect = (groupId: number) => {
 		setSelectedGroup(groupId);
-		const group = groups.find((g) => g.id === groupId);
-		if (group) {
-			setSelectedDepartment(group.departmentId);
-		}
 	};
 
-	useEffect(() => {
-		const firstGroupInDepartment = filteredGroups[0]?.id || NO_SELECTION;
-		setSelectedGroup(firstGroupInDepartment);
-	}, [selectedDepartment]);
+	const handleResetGroupFilter = () => {
+		setSelectedGroup(NO_SELECTION);
+	};
+
+	const handleResetAllFilters = () => {
+		setSelectedGroup(NO_SELECTION);
+		setSelectedDepartment(NO_SELECTION);
+	};
+
+	const filteredGroups = useMemo(() => {
+		return selectedDepartment === NO_SELECTION
+			? groups
+			: groups.filter((group) => group.departmentId === selectedDepartment);
+	}, [groups, selectedDepartment, NO_SELECTION]);
 
 	useEffect(() => {
 		if (selectedGroup !== NO_SELECTION) {
@@ -71,35 +77,54 @@ const MainTable = ({
 				setSelectedDepartment(group.departmentId);
 			}
 		}
-	}, [selectedGroup]);
+	}, [selectedGroup, groups, NO_SELECTION]);
 
-	const filteredGroups = useMemo(() => {
-		return selectedDepartment === NO_SELECTION
-			? groups
-			: groups.filter((group) => group.departmentId === selectedDepartment);
-	}, [groups, selectedDepartment]);
+	useEffect(() => {
+		if (selectedDepartment !== NO_SELECTION && selectedGroup !== NO_SELECTION) {
+			const group = groups.find((g) => g.id === selectedGroup);
+			if (!group || group.departmentId !== selectedDepartment) {
+				setSelectedGroup(NO_SELECTION);
+			}
+		}
+	}, [selectedDepartment, selectedGroup, groups, NO_SELECTION]);
 
 	const groupSchedule = useMemo(() => {
-		if (selectedGroup === NO_SELECTION) return [];
+		if (selectedGroup === NO_SELECTION) {
+			if (selectedDepartment !== NO_SELECTION) {
+				return schedule.filter((lesson) => {
+					const group = groups.find((g) => g.id === lesson.groupId);
+					return group && group.departmentId === selectedDepartment;
+				});
+			}
+			return schedule;
+		}
 		return schedule.filter((lesson) => lesson.groupId === selectedGroup);
-	}, [schedule, selectedGroup]);
+	}, [schedule, selectedGroup, selectedDepartment, groups, NO_SELECTION]);
 
-	const filteredSchedule = useMemo(() => {
-		const base =
+	const currentSchedule = useMemo(() => {
+		const baseSchedule =
 			selectedGroup !== NO_SELECTION
 				? groupSchedule
 				: schedule.filter((lesson) => lesson.dayId === selectedDay);
+
 		return selectedTeacher !== NO_SELECTION
-			? base.filter((lesson) => lesson.teacherId === selectedTeacher)
-			: base;
-	}, [groupSchedule, schedule, selectedDay, selectedTeacher, selectedGroup]);
+			? baseSchedule.filter((lesson) => lesson.teacherId === selectedTeacher)
+			: baseSchedule;
+	}, [
+		groupSchedule,
+		schedule,
+		selectedDay,
+		selectedTeacher,
+		selectedGroup,
+		NO_SELECTION,
+	]);
 
 	useEffect(() => {
 		setActiveSchedule({
 			group: selectedGroup !== NO_SELECTION,
 			teacher: selectedTeacher !== NO_SELECTION,
 		});
-	}, [selectedGroup, selectedTeacher]);
+	}, [selectedGroup, selectedTeacher, NO_SELECTION]);
 
 	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
 		<ActiveTableRow
@@ -111,32 +136,40 @@ const MainTable = ({
 			teachers={teachers}
 			rooms={rooms}
 			activeGroupSchedule={activeSchedule.group}
-			selectedDaySchedule={filteredSchedule}
-			selectedGroupSchedule={filteredSchedule}
+			currentSchedule={currentSchedule}
 			setSelectedGroup={handleGroupSelect}
+			role={role}
 		/>
 	);
 
-	const renderHeader = () => (
-		<select
-			value={activeSchedule.group ? selectedGroup : selectedDay}
-			onChange={(e) =>
-				activeSchedule.group
-					? setSelectedGroup(Number(e.target.value))
-					: setSelectedDay(Number(e.target.value))
+	const renderHeader = () => {
+		const isGroupView = activeSchedule.group;
+		const selectValue = isGroupView ? selectedGroup : selectedDay;
+		const itemsList = isGroupView ? filteredGroups : days;
+
+		const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+			const value = Number(e.target.value);
+			if (isGroupView) {
+				setSelectedGroup(value);
+			} else {
+				setSelectedDay(value);
 			}
-			className='custom_select'
-		>
-			{activeSchedule.group && (
-				<option value={NO_SELECTION}>Full schedule</option>
-			)}
-			{(activeSchedule.group ? filteredGroups : days).map((item) => (
-				<option key={item.id} value={item.id}>
-					{item.title}
-				</option>
-			))}
-		</select>
-	);
+		};
+
+		return (
+			<select
+				value={selectValue}
+				onChange={handleSelectChange}
+				className='custom_select'
+			>
+				{itemsList.map((item) => (
+					<option key={item.id} value={item.id}>
+						{item.title}
+					</option>
+				))}
+			</select>
+		);
+	};
 
 	const renderRows = () => {
 		if (activeSchedule.group) {
@@ -183,9 +216,13 @@ const MainTable = ({
 				teachers={teachers}
 				selectedDepartment={selectedDepartment}
 				selectedTeacher={selectedTeacher}
+				selectedGroup={selectedGroup}
 				onDepartmentChange={setSelectedDepartment}
 				onTeacherChange={setSelectedTeacher}
+				onResetGroupFilter={handleResetGroupFilter}
+				onResetAllFilters={handleResetAllFilters}
 				noSelection={NO_SELECTION}
+				role={role}
 			/>
 
 			<ScheduleGrid timeSlots={timeSlots} headerContent={renderHeader()}>
