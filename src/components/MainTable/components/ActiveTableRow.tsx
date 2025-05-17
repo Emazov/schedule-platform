@@ -6,7 +6,7 @@ import type {
 	Teacher,
 	Room,
 	Schedule,
-} from '../../../types/schedule';
+} from '../../../types/types';
 
 import FilledCell from './FilledCell';
 
@@ -20,6 +20,7 @@ type ActiveTableRowProps = {
 	activeGroupSchedule: boolean;
 	currentSchedule: Schedule[];
 	setSelectedGroup: (id: number) => void;
+	role: string;
 };
 
 const ActiveTableRow = ({
@@ -32,6 +33,7 @@ const ActiveTableRow = ({
 	activeGroupSchedule,
 	currentSchedule,
 	setSelectedGroup,
+	role,
 }: ActiveTableRowProps) => {
 	const occupiedSlots = new Set();
 
@@ -46,15 +48,28 @@ const ActiveTableRow = ({
 		);
 	};
 
+	const setGroup = (groupId: number) => {
+		if (!activeGroupSchedule) {
+			if (role === 'teacher') return;
+			setSelectedGroup(groupId);
+		}
+	};
+
+	const cursorStyle = () => {
+		if (activeGroupSchedule) return 'default';
+		if (role === 'teacher') return 'default';
+		return 'pointer';
+	};
+
 	return (
 		<>
 			<div
 				className='main_table__label'
 				style={{
 					gridRow: rowIdx + 2,
-					cursor: activeGroupSchedule ? 'default' : 'pointer',
+					cursor: cursorStyle(),
 				}}
-				onClick={() => !activeGroupSchedule && setSelectedGroup(row.id)}
+				onClick={() => setGroup(row.id)}
 			>
 				{row.title}
 			</div>

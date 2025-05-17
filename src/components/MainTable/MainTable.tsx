@@ -14,7 +14,7 @@ import type {
 	Lesson,
 	Teacher,
 	Room,
-} from '../../types/schedule';
+} from '../../types/types';
 
 type MainTableProps = {
 	days: Day[];
@@ -25,6 +25,7 @@ type MainTableProps = {
 	lessons: Lesson[];
 	teachers: Teacher[];
 	rooms: Room[];
+	role: string;
 };
 
 const MainTable = ({
@@ -36,15 +37,14 @@ const MainTable = ({
 	lessons,
 	teachers,
 	rooms,
+	role,
 }: MainTableProps) => {
 	const NO_SELECTION = -1;
 
 	const [selectedDay, setSelectedDay] = useState(days[0].id);
 	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
 	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
-	const [selectedDepartment, setSelectedDepartment] = useState(
-		departments[0].id,
-	);
+	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
 
 	const [activeSchedule, setActiveSchedule] = useState({
 		group: true,
@@ -53,10 +53,15 @@ const MainTable = ({
 
 	const handleGroupSelect = (groupId: number) => {
 		setSelectedGroup(groupId);
-		const group = groups.find((g) => g.id === groupId);
-		if (group) {
-			setSelectedDepartment(group.departmentId);
-		}
+	};
+
+	const handleResetGroupFilter = () => {
+		setSelectedGroup(NO_SELECTION);
+	};
+
+	const handleResetAllFilters = () => {
+		setSelectedGroup(NO_SELECTION);
+		setSelectedDepartment(NO_SELECTION);
 	};
 
 	const filteredGroups = useMemo(() => {
@@ -64,11 +69,6 @@ const MainTable = ({
 			? groups
 			: groups.filter((group) => group.departmentId === selectedDepartment);
 	}, [groups, selectedDepartment, NO_SELECTION]);
-
-	useEffect(() => {
-		const firstGroupInDepartment = filteredGroups[0]?.id || NO_SELECTION;
-		setSelectedGroup(firstGroupInDepartment);
-	}, [filteredGroups, NO_SELECTION]);
 
 	useEffect(() => {
 		if (selectedGroup !== NO_SELECTION) {
@@ -79,10 +79,27 @@ const MainTable = ({
 		}
 	}, [selectedGroup, groups, NO_SELECTION]);
 
+	useEffect(() => {
+		if (selectedDepartment !== NO_SELECTION && selectedGroup !== NO_SELECTION) {
+			const group = groups.find((g) => g.id === selectedGroup);
+			if (!group || group.departmentId !== selectedDepartment) {
+				setSelectedGroup(NO_SELECTION);
+			}
+		}
+	}, [selectedDepartment, selectedGroup, groups, NO_SELECTION]);
+
 	const groupSchedule = useMemo(() => {
-		if (selectedGroup === NO_SELECTION) return [];
+		if (selectedGroup === NO_SELECTION) {
+			if (selectedDepartment !== NO_SELECTION) {
+				return schedule.filter((lesson) => {
+					const group = groups.find((g) => g.id === lesson.groupId);
+					return group && group.departmentId === selectedDepartment;
+				});
+			}
+			return schedule;
+		}
 		return schedule.filter((lesson) => lesson.groupId === selectedGroup);
-	}, [schedule, selectedGroup, NO_SELECTION]);
+	}, [schedule, selectedGroup, selectedDepartment, groups, NO_SELECTION]);
 
 	const currentSchedule = useMemo(() => {
 		const baseSchedule =
@@ -121,6 +138,7 @@ const MainTable = ({
 			activeGroupSchedule={activeSchedule.group}
 			currentSchedule={currentSchedule}
 			setSelectedGroup={handleGroupSelect}
+			role={role}
 		/>
 	);
 
@@ -144,7 +162,6 @@ const MainTable = ({
 				onChange={handleSelectChange}
 				className='custom_select'
 			>
-				{isGroupView && <option value={NO_SELECTION}>Full schedule</option>}
 				{itemsList.map((item) => (
 					<option key={item.id} value={item.id}>
 						{item.title}
@@ -199,9 +216,13 @@ const MainTable = ({
 				teachers={teachers}
 				selectedDepartment={selectedDepartment}
 				selectedTeacher={selectedTeacher}
+				selectedGroup={selectedGroup}
 				onDepartmentChange={setSelectedDepartment}
 				onTeacherChange={setSelectedTeacher}
+				onResetGroupFilter={handleResetGroupFilter}
+				onResetAllFilters={handleResetAllFilters}
 				noSelection={NO_SELECTION}
+				role={role}
 			/>
 
 			<ScheduleGrid timeSlots={timeSlots} headerContent={renderHeader()}>

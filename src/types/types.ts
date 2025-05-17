@@ -11,6 +11,12 @@ export type TimeSlot = {
 	end: string;
 };
 
+export type AuthState = {
+	isAuth: boolean;
+	role: string;
+	email: string;
+};
+
 export type Role = {
 	id: number;
 	code: string;
@@ -41,7 +47,9 @@ export type Lesson = {
 export type Teacher = {
 	id: number;
 	code: string;
+	title?: string;
 	name: string;
+	email: string;
 };
 
 export type Room = {

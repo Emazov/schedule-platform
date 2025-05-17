@@ -2,8 +2,16 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: 'Montserrat', sans-serif;
 }
 
-body {
-	font-family: 'Montserrat', sans-serif;
+input {
+	outline: none;
+}
+
+select {
+	cursor: pointer;
+	outline: none;
+	background: transparent;
+	-webkit-appearance: none;
 }

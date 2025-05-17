@@ -1,5 +1,5 @@
 import LessonCard from '../../LessonCard/LessonCard';
-import type { Lesson, Teacher, Room } from '../../../types/schedule';
+import type { Lesson, Teacher, Room } from '../../../types/types';
 
 type FilledCellProps = {
 	columnStart: number;

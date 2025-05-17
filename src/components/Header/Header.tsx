@@ -1,32 +1,24 @@
-import { useState } from 'react';
 import './header.css';
 
-import type { Role } from '../../types/schedule';
-
 type HeaderProps = {
-	roles: Role[];
+	role: string;
+	email: string;
+	onLogout: () => void;
 };
 
-const Header = ({ roles }: HeaderProps) => {
-	const [activeRole, setActiveRole] = useState(roles[1].id);
-
+const Header = ({ email, onLogout }: HeaderProps) => {
 	return (
 		<header className='header'>
 			<div className='header_container'>
-				<img src='./logo_aiu.png' alt='' className='header_logo' />
-				<h1 className='header_title'>Schedule platform</h1>
+				<div className='header_logo'>
+					<img src='./logo_aiu.png' alt='' />
+					<h1 className='header_title'>Schedule platform</h1>
+				</div>
 				<div className='header_roles'>
-					<select
-						className='header_select custom_select'
-						value={activeRole}
-						onChange={(e) => setActiveRole(Number(e.target.value))}
-					>
-						{roles.map((role) => (
-							<option key={role.id} value={role.id}>
-								{role.name}
-							</option>
-						))}
-					</select>
+					<div className='header_role'>{email}</div>
+					<button onClick={onLogout} className='header_logout'>
+						out
+					</button>
 				</div>
 			</div>
 		</header>

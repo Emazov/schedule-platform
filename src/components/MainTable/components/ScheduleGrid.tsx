@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { TimeSlot } from '../../../types/schedule';
+import type { TimeSlot } from '../../../types/types';
 import MainTableHeader from './MainTableHeader';
 
 type ScheduleGridProps = {

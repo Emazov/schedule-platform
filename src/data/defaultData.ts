@@ -43,16 +43,6 @@ export const colorPalette = [
 	'#6C5B7B',
 ];
 
-export const teachers = [
-	{ id: 0, code: 'andrei_ermakov', name: 'Andrei Ermakov' },
-	{ id: 1, code: 'meezan_chand', name: 'Mr. Meezan Chand' },
-	{ id: 2, code: 'remudin_mecuria', name: 'Dr. Remudin Mecuria' },
-	{ id: 3, code: 'hussein_chebsi', name: 'Mr. Hussein Chebsi' },
-	{ id: 4, code: 'dim_shayahmetov', name: 'Mr. Dim Shayahmetov' },
-	{ id: 5, code: 'mekia_gaso', name: 'Ms. Mekia Gaso' },
-	{ id: 6, code: 'zhenishbek_orozakhunov', name: 'Mr. Zhenishbek Orozakhunov' },
-];
-
 export const rooms = [
 	{ id: 0, code: 'biglab', name: 'BIGLAB' },
 	{ id: 1, code: '101', name: '101' },
