@@ -37,6 +37,7 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
 					onChange={(e) => setEmail(e.target.value)}
 					placeholder='Enter email'
 					required
+					autoComplete='off'
 				/>
 				<button type='submit'>Login</button>
 			</form>
