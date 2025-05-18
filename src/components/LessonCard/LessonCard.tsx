@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import './lessonCard.css';
 
 import type { Lesson, Teacher, Room } from '../../types/types';
@@ -20,4 +21,4 @@ const LessonCard = ({ lesson, teacher, room }: LessonCardProps) => {
 	);
 };
 
-export default LessonCard;
+export default memo(LessonCard);
