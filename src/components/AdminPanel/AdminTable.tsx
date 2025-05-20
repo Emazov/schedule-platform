@@ -90,7 +90,7 @@ const AdminTable = ({
 						</div>
 
 						{/* Группы департамента */}
-						{item.groups.map((group, groupIdx) => (	
+						{item.groups.map((group) => (	
 							<React.Fragment key={`group-${group.id}`}>
 								<div className='main_table__label'>{group.code}</div>
 								{timeSlots.map((time, timeIdx) => {
