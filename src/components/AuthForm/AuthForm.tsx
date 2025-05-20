@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { admins, teachers } from '../../data/teachers';
+import { UserRole } from '../../constants';
 import './authForm.css';
 
 type AuthFormProps = {
@@ -14,17 +15,17 @@ const AuthForm = ({ onAuth }: AuthFormProps) => {
 
 		const admin = admins.find((a) => a.email === email);
 		if (admin) {
-			onAuth('admin', email);
+			onAuth(UserRole.ADMIN, email);
 			return;
 		}
 
 		const teacher = teachers.find((t) => t.email === email);
 		if (teacher) {
-			onAuth('teacher', email);
+			onAuth(UserRole.TEACHER, email);
 			return;
 		}
 
-		onAuth('student', email);
+		onAuth(UserRole.STUDENT, email);
 	};
 
 	return (

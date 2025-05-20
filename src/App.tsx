@@ -21,7 +21,7 @@ const App = () => {
 
 	return (
 		<main className='main'>
-			<Header role={auth.role} email={auth.email} onLogout={handleLogout} />
+			<Header email={auth.email} onLogout={handleLogout} role={auth.role} />	
 
 			{auth.role === UserRole.ADMIN ? (
 				<AdminTable

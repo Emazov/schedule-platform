@@ -1,4 +1,5 @@
 import type { Department, Teacher } from '../../../types/types';
+import { UserRole } from '../../../constants';
 
 type TableFiltersProps = {
 	departments: Department[];
@@ -53,7 +54,7 @@ const TableFilters = ({
 				</select>
 			)}
 
-			{!(role === 'student') && (
+			{!(role === UserRole.STUDENT) && (
 				<select
 					className='table_filters__select'
 					value={selectedTeacher}

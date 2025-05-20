@@ -26,7 +26,7 @@ export const admins = [
 export const teachers = [
 	{
 		id: 1,
-		role: 'TEAC`HER',
+		role: 'TEACHER',
 		firstName: 'Andrei',
 		lastName: 'Ermakov',
 		email: 'andrei.ermakov@alatoo.edu.kg',

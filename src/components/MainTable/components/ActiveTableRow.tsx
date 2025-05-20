@@ -7,6 +7,7 @@ import type {
 	Room,
 	Schedule,
 } from '../../../types/types';
+import { UserRole } from '../../../constants';
 
 import FilledCell from './FilledCell';
 
@@ -50,14 +51,14 @@ const ActiveTableRow = ({
 
 	const setGroup = (groupId: number) => {
 		if (!activeGroupSchedule) {
-			if (role === 'teacher') return;
+			if (role === UserRole.TEACHER) return;
 			setSelectedGroup(groupId);
 		}
 	};
 
 	const cursorStyle = () => {
 		if (activeGroupSchedule) return 'default';
-		if (role === 'teacher') return 'default';
+		if (role === UserRole.TEACHER) return 'default';
 		return 'pointer';
 	};
 

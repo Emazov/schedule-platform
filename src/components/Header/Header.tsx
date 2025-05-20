@@ -1,12 +1,13 @@
 import './header.css';
+import { UserRole } from '../../constants';
 
 type HeaderProps = {
-	role: string;
 	email: string;
 	onLogout: () => void;
+	role: string;
 };
 
-const Header = ({ email, onLogout }: HeaderProps) => {
+const Header = ({ email, onLogout, role }: HeaderProps) => {
 	return (
 		<header className='header'>
 			<div className='header_container'>
@@ -16,6 +17,8 @@ const Header = ({ email, onLogout }: HeaderProps) => {
 				</div>
 				<div className='header_roles'>
 					<div className='header_role'>{email}</div>
+					{role === UserRole.ADMIN && <p className='header_role'>{role}</p>}
+					{role === UserRole.TEACHER && <p className='header_role'>{role}</p>}
 					<button onClick={onLogout} className='header_logout'>
 						out
 					</button>
