@@ -71,7 +71,7 @@ const ActiveTableRow = ({
 				}}
 				onClick={() => setGroup(row.id)}
 			>
-				{row.title}
+				{row.code}
 			</div>
 
 			{timeSlots.map((time, timeIdx) => {

@@ -9,7 +9,7 @@ const MainTableHeader = ({ timeSlots }: MainTableHeaderProps) => {
 		<>
 			{timeSlots.map((time) => (
 				<div key={time.slot} className='main_table__header'>
-					{time.slot} <br /> {time.start}-{time.end}
+					{time.slot} Hour <br /> {time.start}-{time.end}
 				</div>
 			))}
 		</>

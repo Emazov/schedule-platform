@@ -28,7 +28,7 @@ const TableFilters = ({
 	role,
 }: TableFiltersProps) => {
 	return (
-		<div className='main_table_filter'>
+		<div className='user_table_filter'>
 			{selectedGroup !== noSelection ? (
 				<div className='filter_buttons'>
 					<div className='table_filters__select' onClick={onResetGroupFilter}>
@@ -62,7 +62,7 @@ const TableFilters = ({
 					<option value={noSelection}>teachers</option>
 					{teachers.map((teacher) => (
 						<option key={teacher.id} value={teacher.id}>
-							{teacher.name}
+							{teacher.firstName} {teacher.lastName}
 						</option>
 					))}
 				</select>

@@ -1,0 +1,98 @@
+
+export const admins = [
+	{
+		id: 1,
+		role: 'ADMIN',
+		firstName: 'Andrei',
+		lastName: 'Ermakov',
+		email: 'andrei.ermakov@alatoo.edu.kg',
+	},
+	{
+		id: 2,
+		role: 'ADMIN',
+		firstName: 'admin',
+		lastName: '1',
+		email: 'admin@alatoo.edu.kg',
+	},
+	{
+		id: 3,
+		role: 'ADMIN',
+		firstName: 'admin',
+		lastName: '2',
+		email: 'admin.2@alatoo.edu.kg',
+	},
+];
+
+export const teachers = [
+	{
+		id: 1,
+		role: 'TEAC`HER',
+		firstName: 'Andrei',
+		lastName: 'Ermakov',
+		email: 'andrei.ermakov@alatoo.edu.kg',
+	},
+	{
+		id: 2,
+		role: 'TEACHER',
+		title: 'Dr',
+		firstName: 'Ruslan',
+		lastName: 'Isaev',
+		email: 'ruslan.isaev@alatoo.edu.kg',
+	},
+	{
+		id: 3,
+		role: 'TEACHER',
+		title: 'Dr',
+		firstName: 'Remudin',
+		lastName: 'Mecuria',
+		email: 'remudin.mecuria@alatoo.edu.kg',
+	},
+	{
+		id: 4,
+		role: 'TEACHER',
+		title: 'Mr',
+		firstName: 'Hussein',
+		lastName: 'Chebsi',
+		email: 'hussein.chebsi@alatoo.edu.kg',
+	},
+	{
+		id: 5,
+		role: 'TEACHER',
+		title: 'Mr',
+		firstName: 'Dim',
+		lastName: 'Shayahmetov',
+		email: 'dim.shayahmetov@alatoo.edu.kg',
+	},
+	{
+		id: 6,
+		role: 'TEACHER',
+		title: 'Ms',
+		firstName: 'Mekia',
+		lastName: 'Gaso',
+		email: 'mekia.gaso@alatoo.edu.kg',
+	},
+	{
+		id: 7,
+		role: 'TEACHER',
+		title: 'Mr',
+		firstName: 'Zhenishbek',
+		lastName: 'Orozakhunov',
+		email: 'zhenishbek.orozakhunov@alatoo.edu.kg',
+	},
+	{
+		id: 8,
+		role: 'TEACHER',
+		title: 'Mr',
+		firstName: 'Meezan',
+		lastName: 'Chand',
+		email: 'meezan.chand@alatoo.edu.kg',
+	},
+	{
+		id: 9,
+		role: 'TEACHER',
+		title: 'Dr',
+		firstName: 'Arslan',
+		lastName: 'Khan',
+		email: 'arslan.khan@alatoo.edu.kg',
+	},
+];

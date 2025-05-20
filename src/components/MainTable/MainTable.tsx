@@ -164,7 +164,7 @@ const MainTable = ({
 			>
 				{itemsList.map((item) => (
 					<option key={item.id} value={item.id}>
-						{item.title}
+						{item.code}
 					</option>
 				))}
 			</select>
@@ -186,7 +186,7 @@ const MainTable = ({
 
 					const rows = [
 						<div
-							key={`dept-${department.id}`}
+							key={`dep-${department.id}`}
 							className='main_table__department_header'
 							style={{
 								gridRow: currentRow + 2,

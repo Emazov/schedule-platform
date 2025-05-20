@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { admins, teachers } from '../../data/users';
+import { admins, teachers } from '../../data/teachers';
 import './authForm.css';
 
 type AuthFormProps = {

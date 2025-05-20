@@ -3,7 +3,6 @@ export type Id = number;
 export type Day = {
 	id: Id;
 	code: string;
-	title: string;
 };
 
 export type TimeSlot = {
@@ -13,16 +12,24 @@ export type TimeSlot = {
 	end: string;
 };
 
-export type AuthState = {
-	isAuth: boolean;
-	role: string;
-	email: string;
-};
-
-export type Role = {
+export type Block = {
 	id: Id;
 	code: string;
-	name: string;
+};
+
+export type Room = {
+	id: Id;
+	blockId: Id;
+	code: string;
+};
+
+export type Teacher = {
+	id: Id;
+	role: string;
+	title?: string;
+	firstName: string;
+	lastName: string;
+	email: string;
 };
 
 export type Department = {
@@ -36,28 +43,16 @@ export type Group = {
 	year: number;
 	departmentId: Id;
 	code: string;
-	title: string;
+	subgroup?: string;
 };
 
 export type Lesson = {
 	id: Id;
-	code: string;
+	code?: string;
+	elective?: string;
 	title: string;
+	departments?: Id[];
 	color: string;
-};
-
-export type Teacher = {
-	id: Id;
-	code: string;
-	title?: string;
-	name: string;
-	email: string;
-};
-
-export type Room = {
-	id: Id;
-	code: string;
-	name: string;
 };
 
 export type Schedule = {
@@ -69,4 +64,10 @@ export type Schedule = {
 	dayId: Id;
 	teacherId?: Id;
 	roomId?: Id;
+};
+
+export type AuthState = {
+	isAuth: boolean;
+	role: string;
+	email: string;
 };
