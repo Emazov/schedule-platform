@@ -22,6 +22,16 @@ const MainTable = ({ role }: MainTableProps) => {
 	const { departments, groups, fetchDepartments, fetchGroups } =
 		useGroupStore();
 
+	// Все состояния объявляем до условных операторов
+	const [selectedDay, setSelectedDay] = useState(1);
+	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
+	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
+	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
+	const [activeSchedule, setActiveSchedule] = useState({
+		group: true,
+		teacher: false,
+	});
+
 	// Загружаем базовые данные, необходимые для работы компонента
 	useEffect(() => {
 		fetchDays();
@@ -29,22 +39,12 @@ const MainTable = ({ role }: MainTableProps) => {
 		fetchGroups();
 	}, [fetchDays, fetchDepartments, fetchGroups]);
 
-	const [selectedDay, setSelectedDay] = useState(days[0]?.id || 1);
-	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
-	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
-	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
-
 	// Обновляем selectedDay, когда days загружены
 	useEffect(() => {
 		if (days.length > 0) {
 			setSelectedDay(days[0].id);
 		}
 	}, [days]);
-
-	const [activeSchedule, setActiveSchedule] = useState({
-		group: true,
-		teacher: false,
-	});
 
 	const handleGroupSelect = (groupId: number) => {
 		setSelectedGroup(groupId);
@@ -89,6 +89,11 @@ const MainTable = ({ role }: MainTableProps) => {
 			teacher: selectedTeacher !== NO_SELECTION,
 		});
 	}, [selectedGroup, selectedTeacher]);
+
+	// Если данные ещё не загружены, показываем сообщение о загрузке
+	if (days.length === 0 || departments.length === 0 || groups.length === 0) {
+		return <div className='loading'>Loading...</div>;
+	}
 
 	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
 		<ActiveTableRow
@@ -170,11 +175,6 @@ const MainTable = ({ role }: MainTableProps) => {
 
 		return filteredGroups.map((row, idx) => renderActiveTable(row, idx));
 	};
-
-	// Если данные ещё не загружены, показываем сообщение о загрузке
-	if (days.length === 0 || departments.length === 0 || groups.length === 0) {
-		return <div className='loading'>Loading...</div>;
-	}
 
 	return (
 		<div className='main_table'>

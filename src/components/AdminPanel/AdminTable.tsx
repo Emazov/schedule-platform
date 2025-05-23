@@ -12,6 +12,16 @@ const AdminTable = () => {
 	const { departments, groups, fetchDepartments, fetchGroups } =
 		useGroupStore();
 
+	// Инициализируем состояние с безопасным значением по умолчанию (1)
+	const [selectedDay, setSelectedDay] = useState<number>(1);
+
+	// Обновляем selectedDay, когда days загружены
+	useEffect(() => {
+		if (days.length > 0) {
+			setSelectedDay(days[0].id);
+		}
+	}, [days]);
+
 	// Загружаем все необходимые данные при монтировании компонента
 	useEffect(() => {
 		fetchDays();
@@ -30,8 +40,6 @@ const AdminTable = () => {
 	) {
 		return <div className='loading'>Loading...</div>;
 	}
-
-	const [selectedDay, setSelectedDay] = useState<number>(days[0].id);
 
 	const filteredSchedule = schedule.filter(
 		(lesson) => lesson.dayId === selectedDay,
