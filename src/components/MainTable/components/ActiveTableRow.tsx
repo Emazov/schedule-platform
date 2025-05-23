@@ -1,42 +1,75 @@
-import type {
-	Group,
-	Day,
-	TimeSlot,
-	Lesson,
-	Teacher,
-	Room,
-	Schedule,
-} from '../../../types/types';
+import type { Group, Day, TimeSlot } from '../../../types/types';
 import { UserRole } from '../../../constants';
+import { useEffect } from 'react';
+
+import useLessonStore from '../../../store/useLessonStore';
+import useUserStore from '../../../store/useUserStore';
+import useStockStore from '../../../store/useStockStore';
+import useScheduleStore from '../../../store/useScheduleStore';
 
 import FilledCell from './FilledCell';
 
 type ActiveTableRowProps = {
 	row: Group | Day;
 	rowIdx: number;
-	timeSlots: TimeSlot[];
-	lessons: Lesson[];
-	teachers: Teacher[];
-	rooms: Room[];
 	activeGroupSchedule: boolean;
-	currentSchedule: Schedule[];
 	setSelectedGroup: (id: number) => void;
 	role: string;
+	selectedDay: number;
+	selectedGroup: number;
+	selectedTeacher: number;
 };
 
 const ActiveTableRow = ({
 	row,
 	rowIdx,
-	timeSlots,
-	lessons,
-	teachers,
-	rooms,
 	activeGroupSchedule,
-	currentSchedule,
 	setSelectedGroup,
 	role,
+	selectedDay,
+	selectedGroup,
+	selectedTeacher,
 }: ActiveTableRowProps) => {
+	// Получаем данные напрямую из хранилищ
+	const { lessons, fetchLessons } = useLessonStore();
+	const { teachers, fetchTeachers } = useUserStore();
+	const { timeSlots, rooms, fetchTimeSlots, fetchRooms } = useStockStore();
+	const { schedule, fetchSchedule } = useScheduleStore();
+
+	// Загружаем данные при монтировании компонента
+	useEffect(() => {
+		fetchLessons();
+		fetchTeachers();
+		fetchTimeSlots();
+		fetchRooms();
+		fetchSchedule();
+	}, [fetchLessons, fetchTeachers, fetchTimeSlots, fetchRooms, fetchSchedule]);
+
+	// Если необходимые данные ещё не загружены, не рендерим ничего
+	if (timeSlots.length === 0) {
+		return null;
+	}
+
 	const occupiedSlots = new Set();
+
+	// Фильтруем расписание в зависимости от выбранных фильтров
+	const currentSchedule = (() => {
+		if (selectedGroup !== -1) {
+			const filtered = schedule.filter(
+				(lesson) => lesson.groupId === selectedGroup,
+			);
+			return selectedTeacher !== -1
+				? filtered.filter((lesson) => lesson.teacherId === selectedTeacher)
+				: filtered;
+		} else {
+			const filtered = schedule.filter(
+				(lesson) => lesson.dayId === selectedDay,
+			);
+			return selectedTeacher !== -1
+				? filtered.filter((lesson) => lesson.teacherId === selectedTeacher)
+				: filtered;
+		}
+	})();
 
 	const getScheduledLesson = (time: TimeSlot) => {
 		if (activeGroupSchedule) {

@@ -51,7 +51,13 @@ export type Lesson = {
 	code?: string;
 	elective?: string;
 	title: string;
-	departments?: Id[];
+	departments: Id[];
+	color: string;
+};
+
+export type Event = {
+	id: Id;
+	title: string;
 	color: string;
 };
 

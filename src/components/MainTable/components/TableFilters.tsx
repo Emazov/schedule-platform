@@ -1,9 +1,9 @@
-import type { Department, Teacher } from '../../../types/types';
 import { UserRole } from '../../../constants';
+import useUserStore from '../../../store/useUserStore';
+import useGroupStore from '../../../store/useGroupStore';
+import { useEffect } from 'react';
 
 type TableFiltersProps = {
-	departments: Department[];
-	teachers: Teacher[];
 	selectedDepartment: number;
 	selectedTeacher: number;
 	selectedGroup: number;
@@ -16,8 +16,6 @@ type TableFiltersProps = {
 };
 
 const TableFilters = ({
-	departments,
-	teachers,
 	selectedDepartment,
 	selectedTeacher,
 	selectedGroup,
@@ -28,6 +26,20 @@ const TableFilters = ({
 	noSelection,
 	role,
 }: TableFiltersProps) => {
+	// Получаем данные напрямую из хранилищ
+	const { teachers, fetchTeachers } = useUserStore();
+	const { departments, fetchDepartments } = useGroupStore();
+
+	// Загружаем данные при монтировании компонента
+	useEffect(() => {
+		fetchTeachers();
+		fetchDepartments();
+	}, [fetchTeachers, fetchDepartments]);
+	
+	// Если данные ещё не загружены, показываем упрощенный интерфейс
+	const showTeacherFilter = teachers.length > 0 && (role === UserRole.TEACHER || role === UserRole.ADMIN);
+	const showDepartmentFilter = departments.length > 0 && selectedGroup === noSelection;
+
 	return (
 		<div className='user_table_filter'>
 			{selectedGroup !== noSelection ? (
@@ -39,7 +51,7 @@ const TableFilters = ({
 						All departments
 					</div>
 				</div>
-			) : (
+			) : showDepartmentFilter ? (
 				<select
 					className='table_filters__select'
 					value={selectedDepartment}
@@ -52,9 +64,9 @@ const TableFilters = ({
 						</option>
 					))}
 				</select>
-			)}
+			) : null}
 
-			{!(role === UserRole.STUDENT) && (
+			{showTeacherFilter && (
 				<select
 					className='table_filters__select'
 					value={selectedTeacher}

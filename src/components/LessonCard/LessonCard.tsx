@@ -2,7 +2,7 @@ import { memo } from 'react';
 import './lessonCard.css';
 
 import type { Lesson, Teacher, Room } from '../../types/types';
-import { blocks } from '../../data/defaultData';
+import useStockStore from '../../store/useStockStore';
 
 type LessonCardProps = {
 	lesson: Lesson;
@@ -11,6 +11,7 @@ type LessonCardProps = {
 };
 
 const LessonCard = ({ lesson, teacher, room }: LessonCardProps) => {
+	const { blocks } = useStockStore();
 	const block = blocks.find((b) => b.id === room?.blockId);
 
 	return (

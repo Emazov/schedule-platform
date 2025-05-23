@@ -1,10 +1,14 @@
-import type { TimeSlot } from '../../../types/types';
+import useStockStore from '../../../store/useStockStore';
 
-type MainTableHeaderProps = {
-	timeSlots: TimeSlot[];
-};
+const MainTableHeader = () => {
+	// Получаем данные напрямую из хранилищ
+	const { timeSlots } = useStockStore();
 
-const MainTableHeader = ({ timeSlots }: MainTableHeaderProps) => {
+	// Если данные ещё не загружены, не рендерим ничего
+	if (timeSlots.length === 0) {
+		return null;
+	}
+
 	return (
 		<>
 			{timeSlots.map((time) => (

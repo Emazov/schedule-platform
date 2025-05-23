@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { admins, teachers } from '../../data/teachers';
-import { UserRole } from '../../constants';
+import { useState, useEffect } from 'react';
 import './authForm.css';
+
+import { UserRole } from '../../constants';
+import useUserStore from '../../store/useUserStore';
 
 type AuthFormProps = {
 	onAuth: (role: string, email: string) => void;
@@ -9,6 +10,13 @@ type AuthFormProps = {
 
 const AuthForm = ({ onAuth }: AuthFormProps) => {
 	const [email, setEmail] = useState('');
+	const { admins, teachers, fetchAdmins, fetchTeachers } =
+		useUserStore();
+
+	useEffect(() => {
+		fetchAdmins();
+		fetchTeachers();
+	}, [fetchAdmins, fetchTeachers]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();

@@ -1,50 +1,45 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './mainTable.css';
 
 import ActiveTableRow from './components/ActiveTableRow';
 import ScheduleGrid from './components/ScheduleGrid';
 import TableFilters from './components/TableFilters';
 
-import type {
-	Day,
-	TimeSlot,
-	Department,
-	Group,
-	Schedule,
-	Lesson,
-	Teacher,
-	Room,
-} from '../../types/types';
+import { NO_SELECTION } from '../../constants';
+
+import useGroupStore from '../../store/useGroupStore';
+import useStockStore from '../../store/useStockStore';
+
+import type { Day, Group } from '../../types/types';
 
 type MainTableProps = {
-	days: Day[];
-	timeSlots: TimeSlot[];
-	departments: Department[];
-	groups: Group[];
-	schedule: Schedule[];
-	lessons: Lesson[];
-	teachers: Teacher[];
-	rooms: Room[];
 	role: string;
 };
 
-const MainTable = ({
-	days,
-	timeSlots,
-	departments,
-	groups,
-	schedule,
-	lessons,
-	teachers,
-	rooms,
-	role,
-}: MainTableProps) => {
-	const NO_SELECTION = -1;
+const MainTable = ({ role }: MainTableProps) => {
+	// Получаем только необходимые данные для этого компонента
+	const { days, fetchDays } = useStockStore();
+	const { departments, groups, fetchDepartments, fetchGroups } =
+		useGroupStore();
 
-	const [selectedDay, setSelectedDay] = useState(days[0].id);
+	// Загружаем базовые данные, необходимые для работы компонента
+	useEffect(() => {
+		fetchDays();
+		fetchDepartments();
+		fetchGroups();
+	}, [fetchDays, fetchDepartments, fetchGroups]);
+
+	const [selectedDay, setSelectedDay] = useState(days[0]?.id || 1);
 	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
 	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
 	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
+
+	// Обновляем selectedDay, когда days загружены
+	useEffect(() => {
+		if (days.length > 0) {
+			setSelectedDay(days[0].id);
+		}
+	}, [days]);
 
 	const [activeSchedule, setActiveSchedule] = useState({
 		group: true,
@@ -68,7 +63,7 @@ const MainTable = ({
 		return selectedDepartment === NO_SELECTION
 			? groups
 			: groups.filter((group) => group.departmentId === selectedDepartment);
-	}, [groups, selectedDepartment, NO_SELECTION]);
+	}, [groups, selectedDepartment]);
 
 	useEffect(() => {
 		if (selectedGroup !== NO_SELECTION) {
@@ -77,7 +72,7 @@ const MainTable = ({
 				setSelectedDepartment(group.departmentId);
 			}
 		}
-	}, [selectedGroup, groups, NO_SELECTION]);
+	}, [selectedGroup, groups]);
 
 	useEffect(() => {
 		if (selectedDepartment !== NO_SELECTION && selectedGroup !== NO_SELECTION) {
@@ -86,59 +81,26 @@ const MainTable = ({
 				setSelectedGroup(NO_SELECTION);
 			}
 		}
-	}, [selectedDepartment, selectedGroup, groups, NO_SELECTION]);
-
-	const groupSchedule = useMemo(() => {
-		if (selectedGroup === NO_SELECTION) {
-			if (selectedDepartment !== NO_SELECTION) {
-				return schedule.filter((lesson) => {
-					const group = groups.find((g) => g.id === lesson.groupId);
-					return group && group.departmentId === selectedDepartment;
-				});
-			}
-			return schedule;
-		}
-		return schedule.filter((lesson) => lesson.groupId === selectedGroup);
-	}, [schedule, selectedGroup, selectedDepartment, groups, NO_SELECTION]);
-
-	const currentSchedule = useMemo(() => {
-		const baseSchedule =
-			selectedGroup !== NO_SELECTION
-				? groupSchedule
-				: schedule.filter((lesson) => lesson.dayId === selectedDay);
-
-		return selectedTeacher !== NO_SELECTION
-			? baseSchedule.filter((lesson) => lesson.teacherId === selectedTeacher)
-			: baseSchedule;
-	}, [
-		groupSchedule,
-		schedule,
-		selectedDay,
-		selectedTeacher,
-		selectedGroup,
-		NO_SELECTION,
-	]);
+	}, [selectedDepartment, selectedGroup, groups]);
 
 	useEffect(() => {
 		setActiveSchedule({
 			group: selectedGroup !== NO_SELECTION,
 			teacher: selectedTeacher !== NO_SELECTION,
 		});
-	}, [selectedGroup, selectedTeacher, NO_SELECTION]);
+	}, [selectedGroup, selectedTeacher]);
 
 	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
 		<ActiveTableRow
 			key={row.id}
 			row={row}
 			rowIdx={rowIdx}
-			timeSlots={timeSlots}
-			lessons={lessons}
-			teachers={teachers}
-			rooms={rooms}
 			activeGroupSchedule={activeSchedule.group}
-			currentSchedule={currentSchedule}
 			setSelectedGroup={handleGroupSelect}
 			role={role}
+			selectedDay={selectedDay}
+			selectedGroup={selectedGroup}
+			selectedTeacher={selectedTeacher}
 		/>
 	);
 
@@ -209,11 +171,14 @@ const MainTable = ({
 		return filteredGroups.map((row, idx) => renderActiveTable(row, idx));
 	};
 
+	// Если данные ещё не загружены, показываем сообщение о загрузке
+	if (days.length === 0 || departments.length === 0 || groups.length === 0) {
+		return <div className='loading'>Loading...</div>;
+	}
+
 	return (
 		<div className='main_table'>
 			<TableFilters
-				departments={departments}
-				teachers={teachers}
 				selectedDepartment={selectedDepartment}
 				selectedTeacher={selectedTeacher}
 				selectedGroup={selectedGroup}
@@ -225,9 +190,7 @@ const MainTable = ({
 				role={role}
 			/>
 
-			<ScheduleGrid timeSlots={timeSlots} headerContent={renderHeader()}>
-				{renderRows()}
-			</ScheduleGrid>
+			<ScheduleGrid headerContent={renderHeader()}>{renderRows()}</ScheduleGrid>
 		</div>
 	);
 };

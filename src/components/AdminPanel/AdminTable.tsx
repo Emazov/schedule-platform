@@ -1,68 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './adminTable.css';
 
-import LessonCard from '../LessonCard/LessonCard';
+import useGroupStore from '../../store/useGroupStore';
+import useStockStore from '../../store/useStockStore';
+import useScheduleStore from '../../store/useScheduleStore';
 
-import type {
-	Day,
-	TimeSlot,
-	Department,
-	Group,
-	Schedule,
-	Lesson,
-	Teacher,
-	Room,
-} from '../../types/types';
+const AdminTable = () => {
+	// Получаем данные напрямую из хранилищ
+	const { days, timeSlots, fetchDays, fetchTimeSlots } = useStockStore();
+	const { schedule, fetchSchedule } = useScheduleStore();
+	const { departments, groups, fetchDepartments, fetchGroups } =
+		useGroupStore();
 
-type AdminTableProps = {
-	days: Day[];
-	timeSlots: TimeSlot[];
-	departments: Department[];
-	groups: Group[];
-	schedule: Schedule[];
-	lessons: Lesson[];
-	teachers: Teacher[];
-	rooms: Room[];
-};
+	// Загружаем все необходимые данные при монтировании компонента
+	useEffect(() => {
+		fetchDays();
+		fetchTimeSlots();
+		fetchDepartments();
+		fetchGroups();
+		fetchSchedule();
+	}, [fetchDays, fetchTimeSlots, fetchDepartments, fetchGroups, fetchSchedule]);
 
-const AdminTable = ({
-	days,
-	timeSlots,
-	departments,
-	groups,
-	schedule,
-	lessons,
-	teachers,
-	rooms,
-}: AdminTableProps) => {
+	// Если данные ещё не загружены, показываем сообщение о загрузке
+	if (
+		days.length === 0 ||
+		timeSlots.length === 0 ||
+		departments.length === 0 ||
+		groups.length === 0
+	) {
+		return <div className='loading'>Loading...</div>;
+	}
+
 	const [selectedDay, setSelectedDay] = useState<number>(days[0].id);
 
 	const filteredSchedule = schedule.filter(
 		(lesson) => lesson.dayId === selectedDay,
 	);
 
-	const filteredLessons = lessons.filter((lesson) =>
-		filteredSchedule.find((schedule) => schedule.lessonId === lesson.id),
-	);
-
-	// Группировка групп по департаментам
-	const groupsByDepartment = departments.map((department) => {
-		const departmentGroups = groups.filter(
-			(group) => group.departmentId === department.id,
-		);
-		return {
-			department,
-			groups: departmentGroups,
-		};
-	});
-
 	return (
 		<div className='main_table'>
 			<div
-				className='main_table__container'
-				style={{ gridTemplateColumns: `auto repeat(${timeSlots.length}, 1fr)` }}
+				className='admin_table__header'
+				style={{
+					gridTemplateColumns: `var(--first-column-width) repeat(${timeSlots.length}, 1fr)`,
+				}}
 			>
-				<div className='main_table__header'>
+				<div className='admin_table__slot'>
 					<select
 						value={selectedDay}
 						onChange={(e) => setSelectedDay(Number(e.target.value))}
@@ -76,94 +59,62 @@ const AdminTable = ({
 					</select>
 				</div>
 				{timeSlots.map((time) => (
-					<div key={`timeslot-${time.id}`} className='main_table__header'>
-						{time.slot} <br /> {time.start}-{time.end}
+					<div key={`timeslot-${time.slot}`} className='admin_table__slot'>
+						{time.slot} Hour <br /> {time.start}-{time.end}
 					</div>
 				))}
-
-				{/* Отображаем департаменты и их группы */}
-				{groupsByDepartment.map((item) => (
-					<React.Fragment key={`department-${item.department.id}`}>
-						{/* Название департамента */}
-						<div className='main_table__label' style={{ gridColumn: '1 / -1' }}>
-							{item.department.title}
+			</div>
+			<div className='admin_table__department'>
+				{departments.map((department) => (
+					<React.Fragment
+						key={`department-${department.id}-${department.code}`}
+					>
+						<div
+							key={`department-${department.id}`}
+							className='admin_table__department_header'
+						>
+							<p>{department.title}</p>
 						</div>
-
-						{/* Группы департамента */}
-						{item.groups.map((group) => (	
-							<React.Fragment key={`group-${group.id}`}>
-								<div className='main_table__label'>{group.code}</div>
-								{timeSlots.map((time, timeIdx) => {
-									// Находим урок для текущей ячейки
-									const lessonSchedule = filteredSchedule.find(
-										(lesson) =>
-											lesson.groupId === group.id &&
-											lesson.timeStartId === time.id,
-									);
-
-									// Если ячейка занята уроком и это начало урока
-									if (lessonSchedule) {
-										const lessonData = filteredLessons.find(
-											(l) => l.id === lessonSchedule.lessonId,
-										);
-										// Отображаем ячейку с уроком, растягивая по длительности
-										return (
-											<div
-												key={`cell-${group.id}-${time.id}`}
-												id={`cell-${group.id}-${time.id}`}
-												className='main_table__cell'
-												style={{
-													gridColumn: `${timeIdx + 2} / span ${
-														lessonSchedule.duration
-													}`,
-												}}
-											>
-												{lessonData && (
-													<LessonCard
-														key={`lesson-card-${lessonSchedule.id}`}
-														lesson={lessonData}
-														teacher={teachers.find(
-															(t) => t.id === lessonSchedule.teacherId,
-														)}
-														room={rooms.find(
-															(r) => r.id === lessonSchedule.roomId,
-														)}
-													/>
-												)}
-											</div>
-										);
-									}
-
-									// Проверяем, не попадает ли эта ячейка в середину урока
-									const isOccupied = filteredSchedule.some((lesson) => {
-										if (lesson.groupId !== group.id) return false;
-
-										const lessonStartTimeIndex = timeSlots.findIndex(
-											(t) => t.id === lesson.timeStartId,
-										);
-
-										if (lessonStartTimeIndex === -1) return false;
-
-										return (
-											timeIdx > lessonStartTimeIndex &&
-											timeIdx < lessonStartTimeIndex + lesson.duration
-										);
-									});
-
-									// Если ячейка находится в середине урока, пропускаем её
-									if (isOccupied) return null;
-
-									// Пустая ячейка
-									return (
+						<div
+							className='admin_table__department_content'
+							style={{
+								gridTemplateColumns: `var(--first-column-width) repeat(${timeSlots.length}, 1fr)`,
+							}}
+						>
+							{groups
+								.filter((group) => group.departmentId === department.id)
+								.map((group) => (
+									<React.Fragment key={`group-${group.id}`}>
 										<div
-											key={`cell-${group.id}-${time.id}`}
-											id={`cell-${group.id}-${time.id}`}
-											className='main_table__cell'
-										></div>
-									);
-								})}
-							</React.Fragment>
-						))}
+											key={`group-${group.id}-${group.code}`}
+											className='main_table__label'
+										>
+											{group.code}
+										</div>
+										{timeSlots.map((time) => {
+											// Проверяем, есть ли занятия для этой группы в это время
+											const hasLessons = filteredSchedule.some(
+												(lesson) =>
+													lesson.timeStartId === time.id &&
+													lesson.groupId === group.id,
+											);
+
+											return (
+												<div
+													key={`timeslot-${time.slot}-${group.id}`}
+													className='main_table__cell'
+													// Можно добавить стиль для ячеек с занятиями
+													style={
+														hasLessons ? { backgroundColor: '#f0f8ff' } : {}
+													}
+												>
+													{/* <LessonCard lesson={scheduledLesson} /> */}
+												</div>
+											);
+										})}
+									</React.Fragment>
+								))}
+						</div>
 					</React.Fragment>
 				))}
 			</div>
