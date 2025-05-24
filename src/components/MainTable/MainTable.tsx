@@ -1,233 +1,154 @@
-import { useEffect, useState, useMemo } from 'react';
-import './mainTable.css';
+import { useEffect } from 'react';
+import styles from './MainTable.module.css';
+import Select from 'react-select';
 
-import ActiveTableRow from './components/ActiveTableRow';
-import ScheduleGrid from './components/ScheduleGrid';
-import TableFilters from './components/TableFilters';
+// components
+import { useTableData } from './hooks/useTableData';
+import { TableHeader } from './components/TableHeader';
+import { DepartmentSection } from './components/DepartmentSection/DepartmentSection';
+import { GroupView } from './components/GroupView/GroupView';
+import Loader from '@/components/Loader/Loader';
 
-import type {
-	Day,
-	TimeSlot,
-	Department,
-	Group,
-	Schedule,
-	Lesson,
-	Teacher,
-	Room,
-} from '../../types/types';
+// constants
+import { NO_SELECTION, UserRole } from '@/constants';
 
 type MainTableProps = {
-	days: Day[];
-	timeSlots: TimeSlot[];
-	departments: Department[];
-	groups: Group[];
-	schedule: Schedule[];
-	lessons: Lesson[];
-	teachers: Teacher[];
-	rooms: Room[];
 	role: string;
 };
 
-const MainTable = ({
-	days,
-	timeSlots,
-	departments,
-	groups,
-	schedule,
-	lessons,
-	teachers,
-	rooms,
-	role,
-}: MainTableProps) => {
-	const NO_SELECTION = -1;
+type OptionType = {
+	value: number;
+	label: string;
+};
 
-	const [selectedDay, setSelectedDay] = useState(days[0].id);
-	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
-	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
-	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
-
-	const [activeSchedule, setActiveSchedule] = useState({
-		group: true,
-		teacher: false,
-	});
-
-	const handleGroupSelect = (groupId: number) => {
-		setSelectedGroup(groupId);
-	};
-
-	const handleResetGroupFilter = () => {
-		setSelectedGroup(NO_SELECTION);
-	};
-
-	const handleResetAllFilters = () => {
-		setSelectedGroup(NO_SELECTION);
-		setSelectedDepartment(NO_SELECTION);
-	};
-
-	const filteredGroups = useMemo(() => {
-		return selectedDepartment === NO_SELECTION
-			? groups
-			: groups.filter((group) => group.departmentId === selectedDepartment);
-	}, [groups, selectedDepartment, NO_SELECTION]);
-
-	useEffect(() => {
-		if (selectedGroup !== NO_SELECTION) {
-			const group = groups.find((g) => g.id === selectedGroup);
-			if (group) {
-				setSelectedDepartment(group.departmentId);
-			}
-		}
-	}, [selectedGroup, groups, NO_SELECTION]);
-
-	useEffect(() => {
-		if (selectedDepartment !== NO_SELECTION && selectedGroup !== NO_SELECTION) {
-			const group = groups.find((g) => g.id === selectedGroup);
-			if (!group || group.departmentId !== selectedDepartment) {
-				setSelectedGroup(NO_SELECTION);
-			}
-		}
-	}, [selectedDepartment, selectedGroup, groups, NO_SELECTION]);
-
-	const groupSchedule = useMemo(() => {
-		if (selectedGroup === NO_SELECTION) {
-			if (selectedDepartment !== NO_SELECTION) {
-				return schedule.filter((lesson) => {
-					const group = groups.find((g) => g.id === lesson.groupId);
-					return group && group.departmentId === selectedDepartment;
-				});
-			}
-			return schedule;
-		}
-		return schedule.filter((lesson) => lesson.groupId === selectedGroup);
-	}, [schedule, selectedGroup, selectedDepartment, groups, NO_SELECTION]);
-
-	const currentSchedule = useMemo(() => {
-		const baseSchedule =
-			selectedGroup !== NO_SELECTION
-				? groupSchedule
-				: schedule.filter((lesson) => lesson.dayId === selectedDay);
-
-		return selectedTeacher !== NO_SELECTION
-			? baseSchedule.filter((lesson) => lesson.teacherId === selectedTeacher)
-			: baseSchedule;
-	}, [
-		groupSchedule,
-		schedule,
+const MainTable = ({ role }: MainTableProps) => {
+	const {
+		timeSlots,
+		departments,
+		teachers,
 		selectedDay,
 		selectedTeacher,
+		selectedDepartment,
 		selectedGroup,
-		NO_SELECTION,
-	]);
+		isGroupView,
+		isLoading,
+		filteredDepartments,
+		filteredSchedule,
+		handleDayChange,
+		handleTeacherChange,
+		handleDepartmentChange,
+		handleGroupSelect,
+		handleBackToNormalView,
+		handleGroupChange,
+	} = useTableData();
+
+	// Форматирование данных для react-select
+	const teacherOptions: OptionType[] = [
+		{ value: NO_SELECTION, label: 'Teacher' },
+		...teachers.map((teacher) => ({
+			value: teacher.id,
+			label: `${teacher.firstName} ${teacher.lastName}`,
+		})),
+	];
+
+	const departmentOptions: OptionType[] = [
+		{ value: NO_SELECTION, label: 'Department' },
+		...departments.map((department) => ({
+			value: department.id,
+			label: department.code,
+		})),
+	];
+
+	// Обработчики для react-select
+	const handleTeacherSelectChange = (option: OptionType | null) => {
+		const value = option ? option.value : NO_SELECTION;
+		const fakeEvent = {
+			target: { value },
+		} as unknown as React.ChangeEvent<HTMLSelectElement>;
+		handleTeacherChange(fakeEvent);
+	};
+
+	const handleDepartmentSelectChange = (option: OptionType | null) => {
+		const value = option ? option.value : NO_SELECTION;
+		const fakeEvent = {
+			target: { value },
+		} as unknown as React.ChangeEvent<HTMLSelectElement>;
+		handleDepartmentChange(fakeEvent);
+	};
 
 	useEffect(() => {
-		setActiveSchedule({
-			group: selectedGroup !== NO_SELECTION,
-			teacher: selectedTeacher !== NO_SELECTION,
-		});
-	}, [selectedGroup, selectedTeacher, NO_SELECTION]);
+		console.log('render');
+	}, []);
 
-	const renderActiveTable = (row: Group | Day, rowIdx: number) => (
-		<ActiveTableRow
-			key={row.id}
-			row={row}
-			rowIdx={rowIdx}
-			timeSlots={timeSlots}
-			lessons={lessons}
-			teachers={teachers}
-			rooms={rooms}
-			activeGroupSchedule={activeSchedule.group}
-			currentSchedule={currentSchedule}
-			setSelectedGroup={handleGroupSelect}
-			role={role}
-		/>
-	);
+	if (isLoading) {
+		return <Loader />;
+	}
 
-	const renderHeader = () => {
-		const isGroupView = activeSchedule.group;
-		const selectValue = isGroupView ? selectedGroup : selectedDay;
-		const itemsList = isGroupView ? filteredGroups : days;
-
-		const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-			const value = Number(e.target.value);
-			if (isGroupView) {
-				setSelectedGroup(value);
-			} else {
-				setSelectedDay(value);
-			}
-		};
-
+	if (isGroupView && (role === UserRole.STUDENT || role === UserRole.ADMIN)) {
 		return (
-			<select
-				value={selectValue}
-				onChange={handleSelectChange}
-				className='custom_select'
-			>
-				{itemsList.map((item) => (
-					<option key={item.id} value={item.id}>
-						{item.title}
-					</option>
-				))}
-			</select>
+			<div className={styles.table}>
+				<GroupView
+					selectedGroup={selectedGroup}
+					filteredSchedule={filteredSchedule}
+					onGroupChange={handleGroupChange}
+					onBackToNormalView={handleBackToNormalView}
+					role={role}
+				/>
+			</div>
 		);
-	};
-
-	const renderRows = () => {
-		if (activeSchedule.group) {
-			return days.map((row, idx) => renderActiveTable(row, idx));
-		}
-
-		if (selectedDepartment === NO_SELECTION) {
-			let currentRow = 0;
-			return departments
-				.map((department) => {
-					const departmentGroups = filteredGroups.filter(
-						(group) => group.departmentId === department.id,
-					);
-
-					const rows = [
-						<div
-							key={`dept-${department.id}`}
-							className='main_table__department_header'
-							style={{
-								gridRow: currentRow + 2,
-								gridColumn: '1 / -1',
-							}}
-						>
-							{department.title}
-						</div>,
-						...departmentGroups.map((group) => {
-							currentRow++;
-							return renderActiveTable(group, currentRow);
-						}),
-					];
-					currentRow++;
-					return rows;
-				})
-				.flat();
-		}
-
-		return filteredGroups.map((row, idx) => renderActiveTable(row, idx));
-	};
+	}
 
 	return (
-		<div className='main_table'>
-			<TableFilters
-				departments={departments}
-				teachers={teachers}
-				selectedDepartment={selectedDepartment}
-				selectedTeacher={selectedTeacher}
-				selectedGroup={selectedGroup}
-				onDepartmentChange={setSelectedDepartment}
-				onTeacherChange={setSelectedTeacher}
-				onResetGroupFilter={handleResetGroupFilter}
-				onResetAllFilters={handleResetAllFilters}
-				noSelection={NO_SELECTION}
-				role={role}
-			/>
+		<div className={styles.table}>
+			<div className={styles.table_filters}>
+				{(role === UserRole.TEACHER || role === UserRole.ADMIN) && (
+					<Select
+						className={styles.select_container}
+						classNamePrefix='react-select'
+						options={teacherOptions}
+						onChange={handleTeacherSelectChange}
+						value={
+							teacherOptions.find(
+								(option) => option.value === selectedTeacher,
+							) || null
+						}
+						placeholder='Search for teacher...'
+						isClearable
+					/>
+				)}
 
-			<ScheduleGrid timeSlots={timeSlots} headerContent={renderHeader()}>
-				{renderRows()}
-			</ScheduleGrid>
+				<Select
+					className={styles.select_container}
+					classNamePrefix='react-select'
+					options={departmentOptions}
+					onChange={handleDepartmentSelectChange}
+					value={
+						departmentOptions.find(
+							(option) => option.value === selectedDepartment,
+						) || null
+					}
+					placeholder='Search for department...'
+					isClearable
+				/>
+			</div>
+
+			<div
+				className={styles.container}
+				style={{ gridTemplateColumns: `auto repeat(${timeSlots.length}, 1fr)` }}
+			>
+				<TableHeader selectedDay={selectedDay} onDayChange={handleDayChange} />
+
+				{filteredDepartments.map((department) => (
+					<DepartmentSection
+						key={department.id}
+						role={role}
+						department={department}
+						filteredSchedule={filteredSchedule}
+						onGroupSelect={handleGroupSelect}
+						selectedDay={selectedDay}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

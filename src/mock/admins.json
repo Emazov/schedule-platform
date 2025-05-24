@@ -1,0 +1,23 @@
+[
+	{
+		"id": 1,
+		"role": "ADMIN",
+		"firstName": "Andrei",
+		"lastName": "Ermakov",
+		"email": "andrei.ermakov@alatoo.edu.kg"
+	},
+	{
+		"id": 2,
+		"role": "ADMIN",
+		"firstName": "admin",
+		"lastName": "1",
+		"email": "admin@alatoo.edu.kg"
+	},
+	{
+		"id": 3,
+		"role": "ADMIN",
+		"firstName": "admin",
+		"lastName": "2",
+		"email": "admin.2@alatoo.edu.kg"
+	}
+]

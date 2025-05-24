@@ -1,0 +1,13 @@
+.form-mode-toggle {
+	display: flex;
+	margin-bottom: 20px;
+	gap: 10px;
+}
+
+.form-mode-toggle button {
+	flex: 1;
+	padding: 8px 15px;
+	border-radius: 4px;
+	font-weight: 500;
+	cursor: pointer;
+}
