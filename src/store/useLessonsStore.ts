@@ -3,10 +3,10 @@ import { create } from 'zustand';
 import type { Lesson } from '@/types/types';
 import lessons from '@mock/lessons.json';
 
-// Ключ для localStorage
+// Key for localStorage
 const LOCAL_STORAGE_KEY = 'lessons_data';
 
-// Получение данных из localStorage
+// Get data from localStorage
 const getLocalStorageData = (userEmail?: string): Lesson[] => {
 	try {
 		const key = userEmail
@@ -20,7 +20,7 @@ const getLocalStorageData = (userEmail?: string): Lesson[] => {
 	}
 };
 
-// Сохранение данных в localStorage
+// Save data to localStorage
 const saveToLocalStorage = (data: Lesson[], userEmail?: string) => {
 	try {
 		const key = userEmail
@@ -49,11 +49,10 @@ const useLessonsStore = create<LessonsStore>((set) => ({
 	fetchLessons: async (userEmail?: string) => {
 		set({ isLoading: true, error: null });
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 500));
-			// Загружаем данные из localStorage, если они есть, иначе из мока
+			await new Promise((resolve) => setTimeout(resolve, 100));
+			// Load data from localStorage if available, otherwise from mock
 			const localData = getLocalStorageData(userEmail);
-			const initialData =
-				localData.length > 0 ? localData : (lessons as Lesson[]);
+			const initialData = localData.length > 0 ? localData : lessons;
 			set({ lessons: initialData, isLoading: false });
 		} catch (error: any) {
 			set({

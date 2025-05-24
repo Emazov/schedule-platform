@@ -69,7 +69,7 @@ const BlockSelector: React.FC<BlockSelectorProps> = ({
 								onClick={() => {
 									setBlockId(block.id);
 									setBlockSearchQuery(block.code);
-									// Сбрасываем поиск комнаты при выборе нового блока
+									// Reset room search when selecting a new block
 									setRoomSearchQuery('');
 								}}
 							>
