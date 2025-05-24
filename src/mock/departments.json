@@ -1,0 +1,22 @@
+[
+	{
+		"id": 1,
+		"code": "com",
+		"title": "Computer Science"
+	},
+	{
+		"id": 2,
+		"code": "math",
+		"title": "Applied Mathematics and Informatics"
+	},
+	{
+		"id": 3,
+		"code": "eeair",
+		"title": "Artificial Intelligence and Robotics"
+	},
+	{
+		"id": 4,
+		"code": "iemit",
+		"title": " Management in Information Technology"
+	}
+]

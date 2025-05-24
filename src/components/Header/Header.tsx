@@ -18,7 +18,6 @@ const Header = ({ email, onLogout, role }: HeaderProps) => {
 				<div className='header_roles'>
 					<div className='header_role'>{email}</div>
 					{role === UserRole.ADMIN && <p className='header_role'>{role}</p>}
-					{role === UserRole.TEACHER && <p className='header_role'>{role}</p>}
 					<button onClick={onLogout} className='header_logout'>
 						out
 					</button>

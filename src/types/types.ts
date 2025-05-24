@@ -63,7 +63,8 @@ export type Event = {
 
 export type Schedule = {
 	id: Id;
-	lessonId: Id;
+	lessonId?: Id;
+	eventId?: Id;
 	groupId: Id;
 	timeStartId: Id;
 	duration: number;

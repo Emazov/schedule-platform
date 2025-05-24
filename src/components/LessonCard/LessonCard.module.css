@@ -1,0 +1,54 @@
+.lesson_card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100%;
+	padding: 6px 12px;
+	border-radius: 4px;
+	position: relative;
+}
+
+.lesson_card__title,
+.lesson_card__text {
+	text-align: center;
+}
+
+.lesson_card__title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.lesson_card__text {
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.lesson_card__room {
+	text-transform: uppercase;
+}
+
+.lesson_card__delete {
+	position: absolute;
+	top: -7px;
+	right: -7px;
+	width: 20px;
+	height: 20px;
+	cursor: pointer;
+	font-size: 14px;
+	color: #fff;
+	background-color: #fc0000;
+	font-weight: bold;
+	border-radius: 50%;
+	opacity: 0;
+	transition: opacity 0.2s, background-color 0.2s;
+	visibility: hidden;
+}
+
+.lesson_card:hover .lesson_card__delete {
+	opacity: 0.9;
+	visibility: visible;
+}
+
+.lesson_card__delete:hover {
+	opacity: 1;
+}

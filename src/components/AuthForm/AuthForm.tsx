@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import './authForm.css';
 
 import { UserRole } from '@constants/index';
-import useUserStore from '@store/useUserStore';
+import useAdminStore from '@store/useAdminStore';
+import useTeacherStore from '@store/useTeacherStore';
 
 type AuthFormProps = {
 	onAuth: (role: string, email: string) => void;
@@ -10,12 +11,16 @@ type AuthFormProps = {
 
 const AuthForm = ({ onAuth }: AuthFormProps) => {
 	const [email, setEmail] = useState('');
-	const { admins, teachers, fetchAdmins, fetchTeachers } = useUserStore();
+
+	const admins = useAdminStore((state) => state.admins);
+	const teachers = useTeacherStore((state) => state.teachers);
+	const fetchAdmins = useAdminStore((state) => state.fetchAdmins);
+	const fetchTeachers = useTeacherStore((state) => state.fetchTeachers);
 
 	useEffect(() => {
 		fetchAdmins();
 		fetchTeachers();
-	}, [fetchAdmins, fetchTeachers]);
+	}, []);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
