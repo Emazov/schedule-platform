@@ -315,7 +315,6 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 					duration,
 					teacherId,
 					roomId,
-					blockId,
 				)
 			) {
 				return;
@@ -367,7 +366,7 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 		} else {
 			// Lesson mode
 			if (
-				!validateForm(isNewLesson, title, teacherId, roomId, duration, blockId)
+				!validateForm(isNewLesson, title, teacherId, roomId, duration)
 			) {
 				return;
 			}
