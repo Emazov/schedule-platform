@@ -26,7 +26,6 @@ export const useFormValidation = (
 		teacherId: number,
 		roomId: number,
 		duration: number,
-		blockId?: number,
 	): boolean => {
 		const newErrors: FormErrors = {};
 
@@ -62,7 +61,6 @@ export const useFormValidation = (
 		duration: number,
 		teacherId?: number,
 		roomId?: number,
-		blockId?: number,
 	): boolean => {
 		const newErrors: FormErrors = {};
 

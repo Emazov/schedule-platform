@@ -16,9 +16,7 @@ type UseTableDataProps = {
 	email?: string;
 };
 
-export const useTableData = (
-	{ role, email }: UseTableDataProps = { role: '' },
-) => {
+export const useTableData = ({ email }: UseTableDataProps = { role: '' }) => {
 	const timeSlots = useStockStore((state) => state.timeSlots);
 	const fetchDays = useStockStore((state) => state.fetchDays);
 	const fetchTimeSlots = useStockStore((state) => state.fetchTimeSlots);

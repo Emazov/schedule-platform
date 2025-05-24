@@ -32,8 +32,6 @@ import useScheduleStore from '@/store/useScheduleStore';
 
 // Types
 import type {
-	Group,
-	TimeSlot,
 	Lesson,
 	Schedule,
 	Event,
@@ -60,10 +58,6 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 	isOpen,
 	onClose,
 	scheduleId,
-	item,
-	teacher,
-	room,
-	block,
 }) => {
 	// Получаем необходимые данные из хранилища
 	const { schedule } = useScheduleStore();
@@ -79,9 +73,9 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 		(state) => state.updateScheduleItem,
 	);
 	const updateLesson =
-		useLessonsStore((state) => state.updateLesson) || ((lesson: Lesson) => {});
+		useLessonsStore((state) => state.updateLesson) || (() => {});
 	const updateEvent =
-		useEventsStore((state) => state.updateEvent) || ((event: Event) => {});
+		useEventsStore((state) => state.updateEvent) || (() => {});
 
 	// Находим запись в расписании для редактирования
 	const scheduleItem = schedule.find((s) => s.id === scheduleId);
@@ -243,16 +237,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 
 		if (isEventMode) {
 			// Event mode
-			if (
-				!validateEventForm(
-					isNewEvent,
-					title,
-					duration,
-					teacherId,
-					roomId,
-					blockId,
-				)
-			) {
+			if (!validateEventForm(isNewEvent, title, duration, teacherId, roomId)) {
 				return;
 			}
 
@@ -306,9 +291,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 			}
 		} else {
 			// Lesson mode
-			if (
-				!validateForm(isNewLesson, title, teacherId, roomId, duration, blockId)
-			) {
+			if (!validateForm(isNewLesson, title, teacherId, roomId, duration)) {
 				return;
 			}
 

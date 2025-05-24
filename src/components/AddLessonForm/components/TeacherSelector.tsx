@@ -87,7 +87,7 @@ const TeacherSelector: React.FC<TeacherSelectorProps> = ({
 										setTeacherSearchQuery(
 											teacher.firstName + ' ' + teacher.lastName,
 										);
-										setErrors((prev) => ({ ...prev, teacher: undefined }));
+										setErrors((prev: any) => ({ ...prev, teacher: undefined }));
 									}}
 								>
 									{formatTeacherName(teacher)}
