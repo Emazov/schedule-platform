@@ -3,10 +3,10 @@ import { create } from 'zustand';
 import type { Schedule } from '@/types/types';
 import schedule from '@mock/schedule.json';
 
-// Ключ для localStorage
+// Key for localStorage
 const LOCAL_STORAGE_KEY = 'schedule_data';
 
-// Получение данных из localStorage
+// Get data from localStorage
 const getLocalStorageData = (userEmail?: string): Schedule[] => {
 	try {
 		const key = userEmail
@@ -20,7 +20,7 @@ const getLocalStorageData = (userEmail?: string): Schedule[] => {
 	}
 };
 
-// Сохранение данных в localStorage
+// Save data to localStorage
 const saveToLocalStorage = (data: Schedule[], userEmail?: string) => {
 	try {
 		const key = userEmail
@@ -51,7 +51,7 @@ const useScheduleStore = create<ScheduleStore>((set) => ({
 		set({ isLoading: true, error: null });
 		try {
 			await new Promise((resolve) => setTimeout(resolve, 100));
-			// Загружаем данные из localStorage, если они есть, иначе из мока
+			// Load data from localStorage if available, otherwise from mock
 			const localData = getLocalStorageData(userEmail);
 			const initialData = localData.length > 0 ? localData : schedule;
 			set({ schedule: initialData, isLoading: false });

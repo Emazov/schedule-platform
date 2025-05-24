@@ -70,17 +70,17 @@ export const useTableData = ({ email }: UseTableDataProps = { role: '' }) => {
 		fetchData();
 	}, [email]);
 
-	// Функция добавления элемента расписания с учетом email пользователя
+	// Function to add schedule item with user email context
 	const handleAddScheduleItem = (item: any) => {
 		addScheduleItem(item, email);
 	};
 
-	// Функция обновления элемента расписания с учетом email пользователя
+	// Function to update schedule item with user email context
 	const handleUpdateScheduleItem = (item: any) => {
 		updateScheduleItem(item, email);
 	};
 
-	// Функция удаления элемента расписания с учетом email пользователя
+	// Function to delete schedule item with user email context
 	const handleDeleteScheduleItem = (id: number) => {
 		deleteScheduleItem(id, email);
 	};

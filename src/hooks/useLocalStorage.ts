@@ -1,23 +1,23 @@
 import { useState, useEffect } from 'react';
 
 /**
- * Хук для работы с localStorage, который использует email пользователя как префикс ключа
- * @param key Ключ для хранения данных
- * @param initialValue Начальное значение
- * @param userEmail Email пользователя (опционально)
- * @returns [value, setValue] Значение и функция для его изменения
+ * Hook for working with localStorage, using user email as a key prefix
+ * @param key Key for storing data
+ * @param initialValue Initial value
+ * @param userEmail User email (optional)
+ * @returns [value, setValue] Value and function to change it
  */
 export function useLocalStorage<T>(
 	key: string,
 	initialValue: T,
 	userEmail?: string,
 ): [T, (value: T) => void] {
-	// Формирование ключа с учетом пользователя
+	// Creating a key with user email prefix
 	const getStorageKey = () => {
 		return userEmail ? `${userEmail}:${key}` : key;
 	};
 
-	// Получение данных из localStorage
+	// Getting data from localStorage
 	const getStoredValue = (): T => {
 		try {
 			const storageKey = getStorageKey();
@@ -32,16 +32,16 @@ export function useLocalStorage<T>(
 		}
 	};
 
-	// Состояние хука
+	// Hook state
 	const [storedValue, setStoredValue] = useState<T>(getStoredValue);
 
-	// Функция для обновления значения
+	// Function to update the value
 	const setValue = (value: T) => {
 		try {
-			// Сохраняем в state
+			// Save to state
 			setStoredValue(value);
 
-			// Сохраняем в localStorage
+			// Save to localStorage
 			const storageKey = getStorageKey();
 			window.localStorage.setItem(storageKey, JSON.stringify(value));
 		} catch (error) {
@@ -52,7 +52,7 @@ export function useLocalStorage<T>(
 		}
 	};
 
-	// При изменении userEmail обновляем значение
+	// Update value when userEmail changes
 	useEffect(() => {
 		setStoredValue(getStoredValue());
 	}, [userEmail]);

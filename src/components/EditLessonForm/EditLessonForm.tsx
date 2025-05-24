@@ -59,7 +59,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 	onClose,
 	scheduleId,
 }) => {
-	// Получаем необходимые данные из хранилища
+	// Get necessary data from store
 	const { schedule } = useScheduleStore();
 	const { timeSlots } = useStockStore();
 	const { lessons } = useLessonsStore();
@@ -68,7 +68,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 	const { rooms } = useRoomsStore();
 	const { blocks } = useBlocksStore();
 
-	// Получаем действия из хранилища
+	// Get actions from store
 	const updateScheduleItem = useScheduleStore(
 		(state) => state.updateScheduleItem,
 	);
@@ -77,10 +77,10 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 	const updateEvent =
 		useEventsStore((state) => state.updateEvent) || (() => {});
 
-	// Находим запись в расписании для редактирования
+	// Find schedule record for editing
 	const scheduleItem = schedule.find((s) => s.id === scheduleId);
 
-	// Form mode state - определяем, это урок или событие
+	// Form mode state - determine if it's a lesson or event
 	const [isEventMode, setIsEventMode] = useState<boolean>(
 		!!scheduleItem?.eventId,
 	);
@@ -127,7 +127,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 		blockId,
 	);
 
-	// Получаем группу, день и временной слот из записи расписания
+	// Get group, day and time slot from schedule record
 	const groupId = scheduleItem?.groupId;
 	const dayId = scheduleItem?.dayId;
 	const timeSlotId = scheduleItem?.timeStartId;
@@ -144,7 +144,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 		groupId || 0,
 		timeSlotId || 0,
 		duration,
-		scheduleId, // Передаем scheduleId, чтобы исключить текущий урок при проверке доступности
+		scheduleId, // Pass scheduleId to exclude current lesson when checking availability
 	);
 
 	const { errors, setErrors, validateForm, validateEventForm } =
@@ -154,13 +154,13 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 			checkCellsAvailability,
 		);
 
-	// Инициализация формы при открытии
+	// Initialize form when opening
 	useEffect(() => {
 		if (isOpen && scheduleItem) {
-			// Установка режима формы (урок или событие)
+			// Set form mode (lesson or event)
 			setIsEventMode(!!scheduleItem.eventId);
 
-			// Установка значений для урока
+			// Set values for lesson
 			if (scheduleItem.lessonId) {
 				const lessonData = lessons.find((l) => l.id === scheduleItem.lessonId);
 				if (lessonData) {
@@ -171,7 +171,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 				}
 			}
 
-			// Установка значений для события
+			// Set values for event
 			if (scheduleItem.eventId) {
 				const eventData = events.find((e) => e.id === scheduleItem.eventId);
 				if (eventData) {
@@ -182,10 +182,10 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 				}
 			}
 
-			// Общие поля
+			// Common fields
 			setDuration(scheduleItem.duration);
 
-			// Установка преподавателя
+			// Set teacher
 			if (scheduleItem.teacherId) {
 				setTeacherId(scheduleItem.teacherId);
 				const teacherData = teachers.find(
@@ -198,7 +198,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 				}
 			}
 
-			// Установка комнаты и блока
+			// Set room and block
 			if (scheduleItem.roomId) {
 				setRoomId(scheduleItem.roomId);
 				const roomData = rooms.find((r) => r.id === scheduleItem.roomId);
@@ -262,11 +262,11 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 					roomId: roomId !== -1 ? roomId : undefined,
 				};
 
-				// Добавляем новое событие и обновляем расписание
+				// Add new event and update schedule
 				if (updateEvent) updateEvent(newEvent);
 				updateScheduleItem(updatedScheduleItem);
 			} else {
-				// Обновляем существующее событие
+				// Update existing event
 				const eventToUpdate = events.find((e) => e.id === eventId);
 				if (eventToUpdate && updateEvent) {
 					const updatedEvent: Event = {
@@ -277,7 +277,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 					updateEvent(updatedEvent);
 				}
 
-				// Обновляем запись в расписании
+				// Update schedule record
 				const updatedScheduleItem: Schedule = {
 					...scheduleItem,
 					eventId,
@@ -317,11 +317,11 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 					roomId,
 				};
 
-				// Добавляем новый урок и обновляем расписание
+				// Add new lesson and update schedule
 				if (updateLesson) updateLesson(newLesson);
 				updateScheduleItem(updatedScheduleItem);
 			} else {
-				// Обновляем существующий урок
+				// Update existing lesson
 				const lessonToUpdate = lessons.find((l) => l.id === lessonId);
 				if (lessonToUpdate && updateLesson) {
 					const updatedLesson: Lesson = {
@@ -332,7 +332,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 					updateLesson(updatedLesson);
 				}
 
-				// Обновляем запись в расписании
+				// Update schedule record
 				const updatedScheduleItem: Schedule = {
 					...scheduleItem,
 					lessonId,
@@ -349,7 +349,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 		onClose();
 	};
 
-	// Обработчик изменения длительности
+	// Duration change handler
 	const handleDurationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const newDuration = Number(e.target.value);
 		if (checkCellsAvailability(newDuration)) {
@@ -390,7 +390,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 		}
 	};
 
-	// Используем портал для рендеринга модального окна в конце body
+	// Use portal to render modal at the end of body
 	const modalContent = (
 		<Modal
 			isOpen={isOpen}
@@ -578,7 +578,7 @@ const EditLessonForm: React.FC<EditLessonFormProps> = ({
 		</Modal>
 	);
 
-	// Рендерим модальное окно в портале для корректного отображения
+	// Render modal window in portal for correct display
 	return isOpen ? ReactDOM.createPortal(modalContent, document.body) : null;
 };
 

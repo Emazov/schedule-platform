@@ -193,7 +193,7 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 	useEffect(() => {
 		if (filteredBlocks.length > 0 && blockSearchQuery.trim()) {
 			setBlockId(filteredBlocks[0].id);
-			// Очищаем выбор комнаты, так как теперь нужно выбрать комнату из выбранного блока
+			// Clear room selection as we now need to select a room from the selected block
 			setRoomId(-1);
 			setRoomSearchQuery('');
 		}
@@ -308,15 +308,7 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 
 		if (isEventMode) {
 			// Event mode
-			if (
-				!validateEventForm(
-					isNewEvent,
-					title,
-					duration,
-					teacherId,
-					roomId,
-				)
-			) {
+			if (!validateEventForm(isNewEvent, title, duration, teacherId, roomId)) {
 				return;
 			}
 
@@ -365,9 +357,7 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 			}
 		} else {
 			// Lesson mode
-			if (
-				!validateForm(isNewLesson, title, teacherId, roomId, duration)
-			) {
+			if (!validateForm(isNewLesson, title, teacherId, roomId, duration)) {
 				return;
 			}
 
@@ -422,7 +412,7 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 		onClose();
 	};
 
-	// Используем портал для рендеринга модального окна в конце body
+	// Use portal to render modal at the end of body
 	const modalContent = (
 		<Modal
 			isOpen={isOpen}
@@ -610,7 +600,7 @@ const AddLessonForm: React.FC<AddLessonFormProps> = ({
 		</Modal>
 	);
 
-	// Рендерим модальное окно в портале для корректного отображения
+	// Render modal window in portal for correct display
 	return isOpen ? ReactDOM.createPortal(modalContent, document.body) : null;
 };
 

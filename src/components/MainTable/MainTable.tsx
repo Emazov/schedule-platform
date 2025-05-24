@@ -42,7 +42,7 @@ const MainTable = ({ role }: MainTableProps) => {
 		handleGroupChange,
 	} = useTableData();
 
-	// Форматирование данных для react-select
+	// Formatting data for react-select
 	const teacherOptions: OptionType[] = [
 		{ value: NO_SELECTION, label: 'Teacher' },
 		...teachers.map((teacher) => ({
@@ -59,7 +59,7 @@ const MainTable = ({ role }: MainTableProps) => {
 		})),
 	];
 
-	// Обработчики для react-select
+	// Handlers for react-select
 	const handleTeacherSelectChange = (option: OptionType | null) => {
 		const value = option ? option.value : NO_SELECTION;
 		const fakeEvent = {

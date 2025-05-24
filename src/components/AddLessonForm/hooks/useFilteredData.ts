@@ -62,13 +62,13 @@ export const useFilteredData = (
 
 	// Filtered rooms based on search and selected block
 	const filteredRooms = useMemo(() => {
-		// Сначала фильтруем по выбранному блоку
+		// First filter by selected block
 		let blockFilteredRooms = rooms;
 		if (blockId !== -1) {
 			blockFilteredRooms = rooms.filter((room) => room.blockId === blockId);
 		}
 
-		// Затем фильтруем по поисковому запросу
+		// Then filter by search query
 		if (!roomSearchQuery.trim()) {
 			return blockFilteredRooms;
 		}

@@ -3,10 +3,10 @@ import { create } from 'zustand';
 import type { Event } from '@/types/types';
 import events from '@mock/events.json';
 
-// Ключ для localStorage
+// Key for localStorage
 const LOCAL_STORAGE_KEY = 'events_data';
 
-// Получение данных из localStorage
+// Get data from localStorage
 const getLocalStorageData = (userEmail?: string): Event[] => {
 	try {
 		const key = userEmail
@@ -20,7 +20,7 @@ const getLocalStorageData = (userEmail?: string): Event[] => {
 	}
 };
 
-// Сохранение данных в localStorage
+// Save data to localStorage
 const saveToLocalStorage = (data: Event[], userEmail?: string) => {
 	try {
 		const key = userEmail
@@ -49,8 +49,8 @@ const useEventStore = create<EventStore>((set) => ({
 	fetchEvents: async (userEmail?: string) => {
 		set({ isLoading: true, error: null });
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 500));
-			// Загружаем данные из localStorage, если они есть, иначе из мока
+			await new Promise((resolve) => setTimeout(resolve, 100));
+			// Load data from localStorage if available, otherwise from mock
 			const localData = getLocalStorageData(userEmail);
 			const initialData = localData.length > 0 ? localData : events;
 			set({ events: initialData, isLoading: false });
