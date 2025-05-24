@@ -53,7 +53,7 @@ const useLessonsStore = create<LessonsStore>((set) => ({
 			// Load data from localStorage if available, otherwise from mock
 			const localData = getLocalStorageData(userEmail);
 			const initialData = localData.length > 0 ? localData : lessons;
-			set({ lessons: initialData, isLoading: false });
+			set({ lessons: initialData as Lesson[], isLoading: false });
 		} catch (error: any) {
 			set({
 				error: error?.message || 'Failed to fetch lessons',
