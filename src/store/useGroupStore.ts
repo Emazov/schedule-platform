@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import type { Department, Group } from '../types/types';
-import { departments, groups } from '../mock/groups';
+import type { Department, Group } from '@/types/types';
+import { departments, groups } from '@mock/groups';
 
 interface GroupsStore {
 	departments: Department[];

@@ -1,5 +1,5 @@
-import AdminTable from './AdminTable';
-import SidePanel from '../SidePanel/SidePanel';
+import AdminTable from './components/AdminPanel/AdminTable';
+import SidePanel from './components/SidePanel/SidePanel';
 
 const AdminPanel = () => {
 	return (

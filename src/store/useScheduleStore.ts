@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import type { Schedule } from '../types/types';
-import { schedule } from '../mock/schedule';
+import type { Schedule } from '@/types/types';
+import { schedule } from '@mock/schedule';
 
 interface ScheduleStore {
 	schedule: Schedule[];

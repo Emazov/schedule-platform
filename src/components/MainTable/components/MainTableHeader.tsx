@@ -1,4 +1,4 @@
-import useStockStore from '../../../store/useStockStore';
+import useStockStore from '@store/useStockStore';
 
 const MainTableHeader = () => {
 	// Получаем данные напрямую из хранилищ

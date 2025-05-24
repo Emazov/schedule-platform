@@ -1,11 +1,11 @@
-import type { Group, Day, TimeSlot } from '../../../types/types';
-import { UserRole } from '../../../constants';
+import type { Group, Day, TimeSlot } from '@/types/types';
+import { UserRole } from '@constants/index';
 import { useEffect } from 'react';
 
-import useLessonStore from '../../../store/useLessonStore';
-import useUserStore from '../../../store/useUserStore';
-import useStockStore from '../../../store/useStockStore';
-import useScheduleStore from '../../../store/useScheduleStore';
+import useLessonStore from '@store/useLessonStore';
+import useUserStore from '@store/useUserStore';
+import useStockStore from '@store/useStockStore';
+import useScheduleStore from '@store/useScheduleStore';
 
 import FilledCell from './FilledCell';
 

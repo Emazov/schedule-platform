@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import './authForm.css';
 
-import { UserRole } from '../../constants';
-import useUserStore from '../../store/useUserStore';
+import { UserRole } from '@constants/index';
+import useUserStore from '@store/useUserStore';
 
 type AuthFormProps = {
 	onAuth: (role: string, email: string) => void;
@@ -10,8 +10,7 @@ type AuthFormProps = {
 
 const AuthForm = ({ onAuth }: AuthFormProps) => {
 	const [email, setEmail] = useState('');
-	const { admins, teachers, fetchAdmins, fetchTeachers } =
-		useUserStore();
+	const { admins, teachers, fetchAdmins, fetchTeachers } = useUserStore();
 
 	useEffect(() => {
 		fetchAdmins();

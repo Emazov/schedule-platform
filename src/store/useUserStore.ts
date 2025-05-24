@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import type { Teacher } from '../types/types';
-import { admins, teachers } from '../mock/users';
+import type { Teacher } from '@/types/types';
+import { admins, teachers } from '@mock/users';
 
 interface UserStore {
 	admins: Teacher[];

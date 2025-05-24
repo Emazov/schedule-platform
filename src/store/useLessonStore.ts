@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import type { Event, Lesson } from '../types/types';
-import { lessons, events } from '../mock/lessons';
+import type { Event, Lesson } from '@/types/types';
+import { lessons, events } from '@mock/lessons';
 
 interface LessonStore {
 	lessons: Lesson[];
@@ -21,7 +21,7 @@ const useLessonStore = create<LessonStore>((set) => ({
 	fetchLessons: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await new Promise((resolve) => setTimeout(resolve, 500));
 			set({ lessons: lessons as Lesson[], isLoading: false });
 		} catch (error: any) {
 			set({
@@ -34,7 +34,7 @@ const useLessonStore = create<LessonStore>((set) => ({
 	fetchEvents: async () => {
 		set({ isLoading: true, error: null });
 		try {
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			await new Promise((resolve) => setTimeout(resolve, 500));
 			set({ events: events as Event[], isLoading: false });
 		} catch (error: any) {
 			set({

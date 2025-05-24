@@ -1,6 +1,6 @@
-import { UserRole } from '../../../constants';
-import useUserStore from '../../../store/useUserStore';
-import useGroupStore from '../../../store/useGroupStore';
+import { UserRole } from '@constants/index';
+import useUserStore from '@store/useUserStore';
+import useGroupStore from '@store/useGroupStore';
 import { useEffect } from 'react';
 
 type TableFiltersProps = {
@@ -35,10 +35,13 @@ const TableFilters = ({
 		fetchTeachers();
 		fetchDepartments();
 	}, [fetchTeachers, fetchDepartments]);
-	
+
 	// Если данные ещё не загружены, показываем упрощенный интерфейс
-	const showTeacherFilter = teachers.length > 0 && (role === UserRole.TEACHER || role === UserRole.ADMIN);
-	const showDepartmentFilter = departments.length > 0 && selectedGroup === noSelection;
+	const showTeacherFilter =
+		teachers.length > 0 &&
+		(role === UserRole.TEACHER || role === UserRole.ADMIN);
+	const showDepartmentFilter =
+		departments.length > 0 && selectedGroup === noSelection;
 
 	return (
 		<div className='user_table_filter'>

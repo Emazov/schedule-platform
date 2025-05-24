@@ -1,5 +1,5 @@
 import './header.css';
-import { UserRole } from '../../constants';
+import { UserRole } from '@constants/index';
 
 type HeaderProps = {
 	email: string;

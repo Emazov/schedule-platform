@@ -5,12 +5,12 @@ import ActiveTableRow from './components/ActiveTableRow';
 import ScheduleGrid from './components/ScheduleGrid';
 import TableFilters from './components/TableFilters';
 
-import { NO_SELECTION } from '../../constants';
+import { NO_SELECTION } from '@constants/index';
 
-import useGroupStore from '../../store/useGroupStore';
-import useStockStore from '../../store/useStockStore';
+import useGroupStore from '@store/useGroupStore';
+import useStockStore from '@store/useStockStore';
 
-import type { Day, Group } from '../../types/types';
+import type { Day, Group } from '@/types/types';
 
 type MainTableProps = {
 	role: string;

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import MainTableHeader from './MainTableHeader';
-import useStockStore from '../../../store/useStockStore';
+import useStockStore from '@store/useStockStore';
 
 type ScheduleGridProps = {
 	headerContent: ReactNode;

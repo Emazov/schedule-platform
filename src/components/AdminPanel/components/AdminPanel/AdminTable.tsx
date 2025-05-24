@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './adminTable.css';
 
-import useGroupStore from '../../store/useGroupStore';
-import useStockStore from '../../store/useStockStore';
-import useScheduleStore from '../../store/useScheduleStore';
+import useGroupStore from '@store/useGroupStore';
+import useStockStore from '@store/useStockStore';
+import useScheduleStore from '@store/useScheduleStore';
 
 const AdminTable = () => {
 	// Получаем данные напрямую из хранилищ

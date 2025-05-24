@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import type { Day, TimeSlot, Block, Room } from '../types/types';
-import { days, timeSlots, blocks, rooms } from '../mock/stock';
+import type { Day, TimeSlot, Block, Room } from '@/types/types';
+import { days, timeSlots, blocks, rooms } from '@mock/stock';
 
 interface StockStore {
 	days: Day[];

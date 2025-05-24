@@ -1,11 +1,11 @@
-import Header from './components/Header/Header';
-import MainTable from './components/MainTable/MainTable';
-import AuthForm from './components/AuthForm/AuthForm';
-import AdminPanel from './components/AdminPanel/AdminPanel';
+import Header from '@components/Header/Header';
+import MainTable from '@components/MainTable/MainTable';
+import AuthForm from '@components/AuthForm/AuthForm';
+import AdminPanel from '@components/AdminPanel/AdminPanel';
 import './App.css';
 
-import { useAuth } from './hooks/useAuth';
-import { UserRole } from './constants';
+import { useAuth } from '@hooks/useAuth';
+import { UserRole } from '@constants/index';
 
 const App = () => {
 	const { auth, handleAuth, handleLogout } = useAuth();
