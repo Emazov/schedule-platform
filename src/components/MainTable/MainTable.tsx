@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styles from './MainTable.module.css';
 import Select from 'react-select';
 
@@ -75,10 +74,6 @@ const MainTable = ({ role }: MainTableProps) => {
 		} as unknown as React.ChangeEvent<HTMLSelectElement>;
 		handleDepartmentChange(fakeEvent);
 	};
-
-	useEffect(() => {
-		console.log('render');
-	}, []);
 
 	if (isLoading) {
 		return <Loader />;
