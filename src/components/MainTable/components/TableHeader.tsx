@@ -15,11 +15,13 @@ export const TableHeader = ({ selectedDay, onDayChange }: TableHeaderProps) => {
 
 	return (
 		<>
-			<div className={styles.table_header}>
+			<div className={`${styles.table_header} ${styles.day_selector}`}>
 				<select
-					className={styles.select}
+					id='day-select'
+					className={`${styles.select} ${styles.day_select}`}
 					value={selectedDay}
 					onChange={onDayChange}
+					title='Select day of the week'
 				>
 					{days.map((day) => (
 						<option key={day.id} value={day.id}>
@@ -29,9 +31,15 @@ export const TableHeader = ({ selectedDay, onDayChange }: TableHeaderProps) => {
 				</select>
 			</div>
 			{timeSlots.map((timeSlot) => (
-				<div key={timeSlot.id} className={styles.table_header}>
-					{timeSlot.slot} Hour <br />
-					{timeSlot.start} - {timeSlot.end}
+				<div
+					key={timeSlot.id}
+					className={`${styles.table_header} ${styles.time_slot_header}`}
+					title={`Time slot: ${timeSlot.start} - ${timeSlot.end}`}
+				>
+					<span className={styles.time_slot_number}>{timeSlot.slot}</span>
+					<span className={styles.time_slot_range}>
+						{timeSlot.start} - {timeSlot.end}
+					</span>
 				</div>
 			))}
 		</>

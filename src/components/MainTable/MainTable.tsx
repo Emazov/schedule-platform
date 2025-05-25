@@ -101,39 +101,39 @@ const MainTable = ({ role }: MainTableProps) => {
 	return (
 		<div className={styles.table}>
 			<div className={styles.table_filters}>
-				<div className={styles.table_filter}>
-					Filter by
-				</div>
+				<div className={styles.table_filter}>Filter by</div>
 
 				{(role === UserRole.TEACHER || role === UserRole.ADMIN) && (
+					<div className={styles.select_wrapper}>
+						<Select
+							className={styles.select_container}
+							classNamePrefix='react-select'
+							options={teacherOptions}
+							onChange={handleTeacherSelectChange}
+							value={
+								teacherOptions.find(
+									(option) => option.value === selectedTeacher,
+								) || null
+							}
+							isClearable
+						/>
+					</div>
+				)}
+
+				<div className={styles.select_wrapper}>
 					<Select
 						className={styles.select_container}
 						classNamePrefix='react-select'
-						options={teacherOptions}
-						onChange={handleTeacherSelectChange}
+						options={departmentOptions}
+						onChange={handleDepartmentSelectChange}
 						value={
-							teacherOptions.find(
-								(option) => option.value === selectedTeacher,
+							departmentOptions.find(
+								(option) => option.value === selectedDepartment,
 							) || null
 						}
-						placeholder='Search for teacher...'
 						isClearable
 					/>
-				)}
-
-				<Select
-					className={styles.select_container}
-					classNamePrefix='react-select'
-					options={departmentOptions}
-					onChange={handleDepartmentSelectChange}
-					value={
-						departmentOptions.find(
-							(option) => option.value === selectedDepartment,
-						) || null
-					}
-					placeholder='Search for department...'
-					isClearable
-				/>
+				</div>
 			</div>
 
 			<div

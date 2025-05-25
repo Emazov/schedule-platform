@@ -35,6 +35,7 @@ export const ScheduleCell = ({
 	const blocks = useRoomsStore((state) => state.blocks);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isHovered, setIsHovered] = useState(false);
 
 	const handleClickOpenModal = () => {
 		if (role === UserRole.ADMIN) setIsModalOpen(true);
@@ -43,6 +44,8 @@ export const ScheduleCell = ({
 	const closeModal = () => {
 		setIsModalOpen(false);
 	};
+
+	const isEditable = role === UserRole.ADMIN;
 
 	if (isPartOfOtherLesson) {
 		return null;
@@ -58,11 +61,17 @@ export const ScheduleCell = ({
 
 		return (
 			<div
-				className={styles.table_cell}
+				className={`${styles.table_cell} ${
+					isEditable ? styles.editable_cell : ''
+				}`}
 				style={{
 					gridColumn: `span ${filteredLesson.duration}`,
-					cursor: role === UserRole.ADMIN ? 'pointer' : 'default',
+					cursor: isEditable ? 'pointer' : 'default',
 				}}
+				onClick={isEditable ? handleClickOpenModal : undefined}
+				onMouseEnter={isEditable ? () => setIsHovered(true) : undefined}
+				onMouseLeave={isEditable ? () => setIsHovered(false) : undefined}
+				title={isEditable ? 'Click to edit' : undefined}
 			>
 				<LessonCard
 					item={scheduledEvent}
@@ -86,11 +95,17 @@ export const ScheduleCell = ({
 
 		return (
 			<div
-				className={styles.table_cell}
+				className={`${styles.table_cell} ${
+					isEditable ? styles.editable_cell : ''
+				}`}
 				style={{
 					gridColumn: `span ${filteredLesson.duration}`,
-					cursor: role === UserRole.ADMIN ? 'pointer' : 'default',
+					cursor: isEditable ? 'pointer' : 'default',
 				}}
+				onClick={isEditable ? handleClickOpenModal : undefined}
+				onMouseEnter={isEditable ? () => setIsHovered(true) : undefined}
+				onMouseLeave={isEditable ? () => setIsHovered(false) : undefined}
+				title={isEditable ? 'Click to edit' : undefined}
 			>
 				<LessonCard
 					item={scheduledLesson}
@@ -107,11 +122,18 @@ export const ScheduleCell = ({
 	return (
 		<>
 			<div
-				className={styles.table_cell}
-				style={{ cursor: role === UserRole.ADMIN ? 'pointer' : 'default' }}
+				className={`${styles.table_cell} ${
+					isEditable ? styles.empty_editable_cell : ''
+				}`}
+				style={{ cursor: isEditable ? 'pointer' : 'default' }}
 				spot-data={`${group.code} - ${timeSlot.slot}`}
 				onClick={handleClickOpenModal}
-			></div>
+				onMouseEnter={isEditable ? () => setIsHovered(true) : undefined}
+				onMouseLeave={isEditable ? () => setIsHovered(false) : undefined}
+				title={isEditable ? 'Click to add lesson' : undefined}
+			>
+				{isEditable && isHovered && <div className={styles.add_icon}>+</div>}
+			</div>
 
 			<AddLessonForm
 				isOpen={isModalOpen}
