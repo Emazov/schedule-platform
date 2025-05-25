@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import styles from './MainTable.module.css';
 import Select from 'react-select';
 
