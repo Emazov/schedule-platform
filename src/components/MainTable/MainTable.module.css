@@ -83,9 +83,9 @@
 }
 
 .table_filter {
-	/* width: 100%; */
 	padding: 8px 12px;
-	background-color: #f5f5f5;
+	color: white;
+	background-color: #007bff;
 	border: 1px solid #ddd;
 	border-radius: 4px;
 	cursor: pointer;

@@ -101,6 +101,10 @@ const MainTable = ({ role }: MainTableProps) => {
 	return (
 		<div className={styles.table}>
 			<div className={styles.table_filters}>
+				<div className={styles.table_filter}>
+					Filter by
+				</div>
+
 				{(role === UserRole.TEACHER || role === UserRole.ADMIN) && (
 					<Select
 						className={styles.select_container}
