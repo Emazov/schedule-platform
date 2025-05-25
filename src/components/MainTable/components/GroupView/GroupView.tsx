@@ -35,7 +35,7 @@ export const GroupView = ({
 		<React.Fragment>
 			<div className={styles.table_filters}>
 				<button onClick={onBackToNormalView} className={styles.table_filter}>
-					department
+					back
 				</button>
 			</div>
 

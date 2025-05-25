@@ -200,9 +200,6 @@
 	justify-content: center;
 }
 
-.select_wrapper .select_container {
-	padding-left: 25px;
-}
 
 .select_wrapper :global(.react-select__control) {
 	padding-left: 15px;
