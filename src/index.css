@@ -1,3 +1,20 @@
+:root {
+	--primary-color: #3a7bd5;
+	--primary-light: #e8f0fe;
+	--primary-hover: #2a6cca;
+	--secondary-color: #f0f7ff;
+	--accent-color: #00c8aa;
+	--text-dark: #333;
+	--text-light: #666;
+	--border-color: #e0e0e0;
+	--shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+	--shadow-md: 0 4px 15px rgba(0, 0, 0, 0.15);
+	--transition-fast: 0.2s ease;
+	--transition-medium: 0.3s ease;
+	--border-radius-sm: 4px;
+	--border-radius-md: 8px;
+}
+
 * {
 	margin: 0;
 	padding: 0;
@@ -5,8 +22,22 @@
 	font-family: 'Montserrat', sans-serif;
 }
 
+body {
+	background-color: #f9fafc;
+	color: var(--text-dark);
+}
+
 input {
 	outline: none;
+	padding: 8px 12px;
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-sm);
+	transition: all var(--transition-fast);
+}
+
+input:focus {
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 2px rgba(58, 123, 213, 0.2);
 }
 
 select {
@@ -15,6 +46,7 @@ select {
 	outline: none;
 	background: transparent;
 	-webkit-appearance: none;
+	transition: all var(--transition-fast);
 }
 
 .no-select {
@@ -25,11 +57,66 @@ select {
 	-ms-user-select: none;
 	/* Internet Explorer/Edge */
 	user-select: none;
-	/* Стандартный синтаксис */
+	/* Standard syntax */
 }
 
 button {
 	cursor: pointer;
 	background: transparent;
 	border: none;
+	transition: all var(--transition-fast);
+	border-radius: var(--border-radius-sm);
+	padding: 8px 16px;
+}
+
+button:hover {
+	background-color: rgba(0, 0, 0, 0.05);
+}
+
+a {
+	color: var(--primary-color);
+	text-decoration: none;
+	transition: all var(--transition-fast);
+	position: relative;
+}
+
+a:hover {
+	color: var(--primary-hover);
+}
+
+a:after {
+	content: '';
+	position: absolute;
+	bottom: -2px;
+	left: 0;
+	width: 0;
+	height: 1px;
+	background-color: var(--primary-hover);
+	transition: width var(--transition-medium);
+}
+
+a:hover:after {
+	width: 100%;
+}
+
+.main {
+	max-width: 100%;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Enhanced styles for clickable elements */
+.clickable {
+	cursor: pointer;
+	transition: all var(--transition-fast);
+	position: relative;
+}
+
+.clickable:hover {
+	color: var(--primary-color);
+}
+
+.clickable:active {
+	transform: scale(0.98);
 }

@@ -101,35 +101,45 @@ const MainTable = ({ role }: MainTableProps) => {
 	return (
 		<div className={styles.table}>
 			<div className={styles.table_filters}>
+				<div className={styles.table_filter}>Filters</div>
+
 				{(role === UserRole.TEACHER || role === UserRole.ADMIN) && (
+					<div className={styles.select_wrapper}>
+						<Select
+							className={styles.select_container}
+							classNamePrefix='react-select'
+							options={teacherOptions}
+							onChange={handleTeacherSelectChange}
+							value={
+								teacherOptions.find(
+									(option) => option.value === selectedTeacher,
+								) || null
+							}
+							placeholder='Select teacher...'
+							isClearable
+							menuPortalTarget={document.body}
+							styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+						/>
+					</div>
+				)}
+
+				<div className={styles.select_wrapper}>
 					<Select
 						className={styles.select_container}
 						classNamePrefix='react-select'
-						options={teacherOptions}
-						onChange={handleTeacherSelectChange}
+						options={departmentOptions}
+						onChange={handleDepartmentSelectChange}
 						value={
-							teacherOptions.find(
-								(option) => option.value === selectedTeacher,
+							departmentOptions.find(
+								(option) => option.value === selectedDepartment,
 							) || null
 						}
-						placeholder='Search for teacher...'
+						placeholder='Select department...'
 						isClearable
+						menuPortalTarget={document.body}
+						styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
 					/>
-				)}
-
-				<Select
-					className={styles.select_container}
-					classNamePrefix='react-select'
-					options={departmentOptions}
-					onChange={handleDepartmentSelectChange}
-					value={
-						departmentOptions.find(
-							(option) => option.value === selectedDepartment,
-						) || null
-					}
-					placeholder='Search for department...'
-					isClearable
-				/>
+				</div>
 			</div>
 
 			<div

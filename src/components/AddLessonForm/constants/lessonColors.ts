@@ -1,6 +1,6 @@
 /**
- * Предопределенные цвета для уроков
- * Используются при создании новых уроков
+ * Predefined colors for lessons
+ * Used when creating new lessons
  */
 export const lessonColors = [
 	'#FFD3B6',
