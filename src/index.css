@@ -57,7 +57,7 @@ select {
 	-ms-user-select: none;
 	/* Internet Explorer/Edge */
 	user-select: none;
-	/* Стандартный синтаксис */
+	/* Standard syntax */
 }
 
 button {
@@ -106,7 +106,7 @@ a:hover:after {
 	flex-direction: column;
 }
 
-/* Улучшенные стили для кликабельных элементов */
+/* Enhanced styles for clickable elements */
 .clickable {
 	cursor: pointer;
 	transition: all var(--transition-fast);

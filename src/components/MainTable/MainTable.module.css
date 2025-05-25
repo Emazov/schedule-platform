@@ -169,7 +169,7 @@
 	transform: translateY(-2px);
 }
 
-/* Стили для react-select */
+/* Styles for react-select */
 .select_container {
 	min-width: 220px;
 	transition: all var(--transition-fast);
@@ -300,7 +300,7 @@
 	color: #666;
 }
 
-/* Адаптивность */
+/* Adaptivity */
 @media (max-width: 768px) {
 	.table {
 		margin: 10px;
@@ -490,7 +490,7 @@
 	height: 18px;
 }
 
-/* Увеличиваем z-index портала меню для обеспечения отображения поверх других элементов */
+/* Increasing z-index of menu portal to ensure display above other elements */
 :global(#react-select-2-listbox) {
 	z-index: 9999 !important;
 }
@@ -499,7 +499,7 @@
 	z-index: 9999 !important;
 }
 
-/* Дополнительные стили для react-select - убираем бордер у инпута */
+/* Additional styles for react-select - removing input border */
 :global(.react-select__input) {
 	border: none !important;
 	box-shadow: none !important;
