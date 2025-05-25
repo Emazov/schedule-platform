@@ -3,7 +3,7 @@
 	overflow-x: auto;
 	border-radius: var(--border-radius-md);
 	box-shadow: var(--shadow-sm);
-	background-color: white;
+	background-color: #f7f9fc;
 	transition: box-shadow var(--transition-fast);
 	position: relative;
 }
@@ -140,7 +140,6 @@
 	padding: 15px;
 	gap: 12px;
 	background-color: #f7f9fc;
-	border-bottom: 1px solid var(--border-color);
 	border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
 	flex-wrap: wrap;
 	align-items: center;

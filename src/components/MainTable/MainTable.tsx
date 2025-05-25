@@ -76,10 +76,6 @@ const MainTable = ({ role }: MainTableProps) => {
 		handleDepartmentChange(fakeEvent);
 	};
 
-	useEffect(() => {
-		console.log('render');
-	}, []);
-
 	if (isLoading) {
 		return <Loader />;
 	}
