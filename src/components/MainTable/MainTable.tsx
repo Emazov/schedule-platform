@@ -101,7 +101,7 @@ const MainTable = ({ role }: MainTableProps) => {
 	return (
 		<div className={styles.table}>
 			<div className={styles.table_filters}>
-				<div className={styles.table_filter}>Filter by</div>
+				<div className={styles.table_filter}>Filters</div>
 
 				{(role === UserRole.TEACHER || role === UserRole.ADMIN) && (
 					<div className={styles.select_wrapper}>
@@ -115,7 +115,10 @@ const MainTable = ({ role }: MainTableProps) => {
 									(option) => option.value === selectedTeacher,
 								) || null
 							}
+							placeholder='Select teacher...'
 							isClearable
+							menuPortalTarget={document.body}
+							styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
 						/>
 					</div>
 				)}
@@ -131,7 +134,10 @@ const MainTable = ({ role }: MainTableProps) => {
 								(option) => option.value === selectedDepartment,
 							) || null
 						}
+						placeholder='Select department...'
 						isClearable
+						menuPortalTarget={document.body}
+						styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
 					/>
 				</div>
 			</div>

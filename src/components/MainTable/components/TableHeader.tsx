@@ -36,7 +36,7 @@ export const TableHeader = ({ selectedDay, onDayChange }: TableHeaderProps) => {
 					className={`${styles.table_header} ${styles.time_slot_header}`}
 					title={`Time slot: ${timeSlot.start} - ${timeSlot.end}`}
 				>
-					<span className={styles.time_slot_number}>{timeSlot.slot}</span>
+					<span className={styles.time_slot_number}>{timeSlot.slot} hour</span>
 					<span className={styles.time_slot_range}>
 						{timeSlot.start} - {timeSlot.end}
 					</span>

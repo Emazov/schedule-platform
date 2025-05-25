@@ -5,6 +5,7 @@
 	box-shadow: var(--shadow-sm);
 	background-color: white;
 	transition: box-shadow var(--transition-fast);
+	position: relative;
 }
 
 .table:hover {
@@ -17,6 +18,8 @@
 	background-color: var(--border-color);
 	border: 1px solid var(--border-color);
 	width: 100%;
+	position: relative;
+	z-index: 1;
 }
 
 .table_header {
@@ -92,7 +95,7 @@
 	background-color: var(--secondary-color);
 	transform: translateY(-2px);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-	z-index: 1;
+	/* z-index: 1; */
 }
 
 .table_cell:before {
@@ -140,6 +143,8 @@
 	border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
 	flex-wrap: wrap;
 	align-items: center;
+	position: relative;
+	z-index: 50;
 }
 
 .table_filter {
@@ -168,10 +173,51 @@
 .select_container {
 	min-width: 220px;
 	transition: all var(--transition-fast);
+	position: relative;
+	z-index: 100;
 }
 
 .select_container:hover {
 	transform: translateY(-2px);
+}
+
+.select_wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	z-index: 100;
+}
+
+.select_icon {
+	position: absolute;
+	left: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	/* z-index: 2; */
+	color: var(--primary-color);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.select_wrapper .select_container {
+	padding-left: 25px;
+}
+
+.select_wrapper :global(.react-select__control) {
+	padding-left: 15px;
+	cursor: pointer;
+	border: 1px solid var(--border-color);
+	position: relative;
+}
+
+.select_wrapper :global(.react-select__value-container) {
+	padding: 6px 12px;
+	border: none;
+}
+
+.select_wrapper :global(.react-select__single-value) {
+	border: none;
 }
 
 :global(.react-select__control) {
@@ -181,6 +227,7 @@
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 	cursor: pointer;
 	transition: all var(--transition-fast);
+	position: relative;
 }
 
 :global(.react-select__control:hover) {
@@ -193,10 +240,6 @@
 	box-shadow: 0 0 0 1px var(--primary-color) !important;
 }
 
-:global(.react-select__value-container) {
-	padding: 6px 12px;
-}
-
 :global(.react-select__placeholder) {
 	color: #999;
 	font-weight: 500;
@@ -207,8 +250,12 @@
 	font-weight: 500;
 }
 
+:global(.react-select__menu-portal) {
+	z-index: 9999 !important;
+}
+
 :global(.react-select__menu) {
-	z-index: 100;
+	z-index: 9999 !important;
 	border-radius: var(--border-radius-sm);
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 	overflow: hidden;
@@ -296,7 +343,7 @@
 
 .editable_cell:hover {
 	border: 1px dashed var(--primary-color);
-	z-index: 2;
+	/* z-index: 2; */
 }
 
 .empty_editable_cell {
@@ -403,15 +450,17 @@
 }
 
 .time_slot_number {
-	font-size: 18px;
-	font-weight: 700;
+	font-size: 14px;
+	font-weight: 600;
 	color: var(--primary-color);
-	margin-bottom: 4px;
+	margin-bottom: 6px;
+	text-transform: uppercase;
 }
 
 .time_slot_range {
-	font-size: 12px;
+	font-size: 16px;
 	color: var(--text-light);
+	font-weight: 600;
 }
 
 .table_filter_label {
@@ -441,29 +490,43 @@
 	height: 18px;
 }
 
-.select_wrapper {
-	position: relative;
-	display: flex;
-	align-items: center;
+/* Увеличиваем z-index портала меню для обеспечения отображения поверх других элементов */
+:global(#react-select-2-listbox) {
+	z-index: 9999 !important;
 }
 
-.select_icon {
-	position: absolute;
-	left: 10px;
-	top: 50%;
-	transform: translateY(-50%);
-	z-index: 2;
-	color: var(--primary-color);
-	display: flex;
-	align-items: center;
-	justify-content: center;
+:global(#react-select-3-listbox) {
+	z-index: 9999 !important;
 }
 
-.select_wrapper .select_container {
-	padding-left: 25px;
+/* Дополнительные стили для react-select - убираем бордер у инпута */
+:global(.react-select__input) {
+	border: none !important;
+	box-shadow: none !important;
 }
 
-.select_wrapper :global(.react-select__control) {
-	padding-left: 15px;
-	cursor: pointer;
+:global(.react-select__input input) {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+:global(.react-select__input-container) {
+	border: none !important;
+	box-shadow: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+:global(.react-select__value-container div) {
+	border: none !important;
+}
+
+:global(.react-select__control--is-focused) {
+	border-color: var(--primary-color) !important;
+	box-shadow: 0 0 0 1px var(--primary-color) !important;
+}
+
+:global(.react-select__control--is-focused .react-select__input-container) {
+	border: none !important;
+	outline: none !important;
 }
