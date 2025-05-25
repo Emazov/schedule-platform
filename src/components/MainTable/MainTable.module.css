@@ -32,6 +32,13 @@
 	color: var(--text-dark);
 	cursor: default;
 	transition: background-color var(--transition-fast);
+
+	&:first-child {
+		position: sticky;
+		left: 0;
+		z-index: 2;
+		border-right: 1px solid var(--border-color);
+	}
 }
 
 .table_department {
@@ -58,7 +65,10 @@
 	color: var(--text-dark);
 	text-transform: uppercase;
 	transition: all var(--transition-fast);
-	position: relative;
+	position: sticky;
+	left: 0;
+	z-index: 2;
+	border-right: 1px solid var(--border-color);
 }
 
 .table_label:hover {
