@@ -18,6 +18,7 @@
 	background-color: var(--border-color);
 	border: 1px solid var(--border-color);
 	width: 100%;
+	min-width: fit-content;
 	position: relative;
 	z-index: 1;
 }
