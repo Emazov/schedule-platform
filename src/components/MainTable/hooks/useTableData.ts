@@ -9,14 +9,15 @@ import useLessonsStore from '@/store/useLessonsStore';
 import useEventsStore from '@/store/useEventsStore';
 import useTeacherStore from '@/store/useTeacherStore';
 import useRoomsStore from '@/store/useRoomsStore';
-import { NO_SELECTION } from '@/constants';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { NO_SELECTION, UserRole } from '@/constants';
 
 type UseTableDataProps = {
 	role: string;
 	email?: string;
 };
 
-export const useTableData = ({ email }: UseTableDataProps = { role: '' }) => {
+export const useTableData = ({ role, email }: UseTableDataProps) => {
 	const timeSlots = useStockStore((state) => state.timeSlots);
 	const fetchDays = useStockStore((state) => state.fetchDays);
 	const fetchTimeSlots = useStockStore((state) => state.fetchTimeSlots);
@@ -43,8 +44,21 @@ export const useTableData = ({ email }: UseTableDataProps = { role: '' }) => {
 	const [selectedDay, setSelectedDay] = useState<number>(1);
 	const [selectedTeacher, setSelectedTeacher] = useState(NO_SELECTION);
 	const [selectedDepartment, setSelectedDepartment] = useState(NO_SELECTION);
-	const [selectedGroup, setSelectedGroup] = useState(NO_SELECTION);
-	const [isGroupView, setIsGroupView] = useState(false);
+
+	// Используем localStorage для сохранения выбранной группы только для студентов
+	const [selectedGroup, setSelectedGroup] = useLocalStorage(
+		'selectedGroup',
+		NO_SELECTION,
+		role === UserRole.STUDENT ? email : undefined,
+	);
+
+	// Сохраняем состояние просмотра группы для студентов
+	const [isGroupView, setIsGroupView] = useLocalStorage(
+		'isGroupView',
+		false,
+		role === UserRole.STUDENT ? email : undefined,
+	);
+
 	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {

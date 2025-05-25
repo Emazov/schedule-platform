@@ -16,7 +16,7 @@ const App = () => {
 	return (
 		<main className='main'>
 			<Header email={auth.email} onLogout={handleLogout} role={auth.role} />
-			<MainTable role={auth.role} />
+			<MainTable role={auth.role} email={auth.email} />
 		</main>
 	);
 };

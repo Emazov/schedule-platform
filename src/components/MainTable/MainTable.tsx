@@ -13,6 +13,7 @@ import { NO_SELECTION, UserRole } from '@/constants';
 
 type MainTableProps = {
 	role: string;
+	email: string;
 };
 
 type OptionType = {
@@ -20,7 +21,7 @@ type OptionType = {
 	label: string;
 };
 
-const MainTable = ({ role }: MainTableProps) => {
+const MainTable = ({ role, email }: MainTableProps) => {
 	const {
 		timeSlots,
 		departments,
@@ -39,7 +40,7 @@ const MainTable = ({ role }: MainTableProps) => {
 		handleGroupSelect,
 		handleBackToNormalView,
 		handleGroupChange,
-	} = useTableData();
+	} = useTableData({ role, email });
 
 	// Formatting data for react-select
 	const teacherOptions: OptionType[] = [
