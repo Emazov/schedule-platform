@@ -69,5 +69,12 @@
 		"firstName": "Arslan",
 		"lastName": "Khan",
 		"email": "arslan.khan@alatoo.edu.kg"
+	},
+	{
+		"id": 10,
+		"role": "TEACHER",
+		"firstName": "Teacher",
+		"lastName": "",
+		"email": "teacher@alatoo.edu.kg"
 	}
 ]
