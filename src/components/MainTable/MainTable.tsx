@@ -23,6 +23,7 @@ type OptionType = {
 
 const MainTable = ({ role, email }: MainTableProps) => {
 	const {
+		days,
 		timeSlots,
 		departments,
 		teachers,
@@ -97,6 +98,21 @@ const MainTable = ({ role, email }: MainTableProps) => {
 	return (
 		<div className={styles.table}>
 			<div className={styles.table_filters}>
+				<div className={styles.select_wrapper}>
+					<select
+						id='day-select'
+						className={styles.select}
+						value={selectedDay}
+						onChange={handleDayChange}
+						title='Select day of the week'
+					>
+						{days.map((day) => (
+							<option key={day.id} value={day.id}>
+								{day.code}
+							</option>
+						))}
+					</select>
+				</div>
 				{(role === UserRole.TEACHER || role === UserRole.ADMIN) && (
 					<div className={styles.select_wrapper}>
 						<Select
@@ -140,7 +156,7 @@ const MainTable = ({ role, email }: MainTableProps) => {
 				className={styles.container}
 				style={{ gridTemplateColumns: `auto repeat(${timeSlots.length}, 1fr)` }}
 			>
-				<TableHeader selectedDay={selectedDay} onDayChange={handleDayChange} />
+				<TableHeader />
 
 				{filteredDepartments.map((department) => (
 					<DepartmentSection

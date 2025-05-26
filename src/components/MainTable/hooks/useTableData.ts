@@ -18,6 +18,7 @@ type UseTableDataProps = {
 };
 
 export const useTableData = ({ role, email }: UseTableDataProps) => {
+	const days = useStockStore((state) => state.days);
 	const timeSlots = useStockStore((state) => state.timeSlots);
 	const fetchDays = useStockStore((state) => state.fetchDays);
 	const fetchTimeSlots = useStockStore((state) => state.fetchTimeSlots);
@@ -147,6 +148,7 @@ export const useTableData = ({ role, email }: UseTableDataProps) => {
 	}, [schedule, selectedDay, selectedTeacher, selectedGroup, isGroupView]);
 
 	return {
+		days,
 		timeSlots,
 		departments,
 		teachers,
