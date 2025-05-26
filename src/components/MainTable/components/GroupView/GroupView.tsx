@@ -56,7 +56,9 @@ export const GroupView = ({
 				className={styles.container}
 				style={{ gridTemplateColumns: `auto repeat(${timeSlots.length}, 1fr)` }}
 			>
-				<div className={styles.table_header}>DAY</div>
+				<div className={`${styles.table_header} ${styles.day_selector}`}>
+					DAY
+				</div>
 				{timeSlots.map((timeSlot) => (
 					<div
 						key={timeSlot.id}

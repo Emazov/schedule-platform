@@ -25,7 +25,7 @@ export const DepartmentSection = ({
 	return (
 		<React.Fragment>
 			<div className={styles.table_department} style={{ gridColumn: `1 / -1` }}>
-				{department.title}
+				<span>{department.title}</span>
 			</div>
 			{groups
 				.filter((group) => group.departmentId === department.id)

@@ -52,6 +52,13 @@
 	transition: background-color var(--transition-fast);
 }
 
+.table_department span {
+	position: sticky;
+	left: 0;
+	right: 0;
+	z-index: 2;
+}
+
 .table_department:hover {
 	background-color: #e4ebf5;
 }
