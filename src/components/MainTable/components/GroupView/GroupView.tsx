@@ -34,6 +34,19 @@ export const GroupView = ({
 	return (
 		<React.Fragment>
 			<div className={styles.table_filters}>
+				<select
+					value={selectedGroup}
+					onChange={onGroupChange}
+					className={styles.select}
+				>
+					{groups
+						.filter((g) => g.departmentId === group.departmentId)
+						.map((g) => (
+							<option key={g.id} value={g.id}>
+								{g.code} {g.year} {g?.subgroup}
+							</option>
+						))}
+				</select>
 				<button onClick={onBackToNormalView} className={styles.table_filter}>
 					back
 				</button>
@@ -43,25 +56,20 @@ export const GroupView = ({
 				className={styles.container}
 				style={{ gridTemplateColumns: `auto repeat(${timeSlots.length}, 1fr)` }}
 			>
-				<div className={styles.table_header}>
-					<select
-						value={selectedGroup}
-						onChange={onGroupChange}
-						className={styles.select}
-					>
-						{groups
-							.filter((g) => g.departmentId === group.departmentId)
-							.map((g) => (
-								<option key={g.id} value={g.id}>
-									{g.code} {g.year} {g?.subgroup}
-								</option>
-							))}
-					</select>
+				<div className={`${styles.table_header} ${styles.day_selector}`}>
+					DAY
 				</div>
 				{timeSlots.map((timeSlot) => (
-					<div key={timeSlot.id} className={styles.table_header}>
-						{timeSlot.slot} Hour <br />
-						{timeSlot.start} - {timeSlot.end}
+					<div
+						key={timeSlot.id}
+						className={`${styles.table_header} ${styles.time_slot_header}`}
+					>
+						<span className={styles.time_slot_number}>
+							{timeSlot.slot} hour
+						</span>
+						<span className={styles.time_slot_range}>
+							{timeSlot.start} - {timeSlot.end}
+						</span>
 					</div>
 				))}
 

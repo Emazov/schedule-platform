@@ -21,7 +21,7 @@ export const DayRow = ({ day, group, filteredSchedule, role }: DayRowProps) => {
 
 	return (
 		<React.Fragment>
-			<div className={styles.table_label}>{day.code}</div>
+			<div className={styles.table_label}>{day.shortCode}</div>
 			{timeSlots.map((timeSlot) => {
 				const filteredLesson = filteredSchedule.find(
 					(lesson) =>

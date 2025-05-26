@@ -3,6 +3,7 @@ export type Id = number;
 export type Day = {
 	id: Id;
 	code: string;
+	shortCode: string;
 };
 
 export type TimeSlot = {
