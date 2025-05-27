@@ -55,7 +55,6 @@
 .table_department span {
 	position: sticky;
 	left: 0;
-	right: 0;
 	z-index: 2;
 }
 
@@ -330,6 +329,10 @@
 
 	.table_filters {
 		gap: 8px;
+	}
+
+	.table_department {
+		text-align: left;
 	}
 }
 
